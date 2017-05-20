@@ -1,0 +1,50 @@
+RewriteEngine On
+RewriteRule ^AddUser?$ AddUser.php
+RewriteRule ^BackEnd?$ Backend.php
+RewriteRule ^BillBooking?$ CreateBill_Booking.php
+RewriteRule ^BillOther?$ CreateBill_Other.php
+RewriteRule ^BillPayfine?$ CreateBill_Payfine.php
+RewriteRule ^BillReceive?$ CreateBill_Receive.php
+RewriteRule ^Bill?$ CreateBill.php
+
+RewriteRule ^Booking?$ CreateBook.php
+RewriteRule ^Booking/([0-9a-zA-Z]+)/([0-9a-zA-Z]+)/([0-9a-zA-Z]+)$ CreateBook.php?id=$1&idb=$2&flag=$3
+
+RewriteRule ^Customer?$ CreateCustomer.php
+RewriteRule ^CustomerToRoom?$ CreateCustomerToRoom.php
+RewriteRule ^Room?$ CreateRoom.php
+RewriteRule ^RoomStatus?$ EditRoomStatus.php
+RewriteRule ^RoomStatusOut?$ CreateRoomStatusOut.php
+RewriteRule ^RoomType?$ CreateRoomType.php
+RewriteRule ^Supply?$ CreateSupply.php
+RewriteRule ^SupplyRoom?$ CreateSupplyRoom.php
+RewriteRule ^Profile?$ EditProfile.php
+RewriteRule ^invoice?$ Formdatainvoice.php
+RewriteRule ^payment?$ Formpayment.php
+RewriteRule ^printinvoice?$ Formprintinvoice.php
+RewriteRule ^printreceipt?$ Formprintreceipt.php
+RewriteRule ^Home?$ index.php
+
+
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+RewriteRule ^user/([0-9]+) user.php?id=$1
+
+
+
