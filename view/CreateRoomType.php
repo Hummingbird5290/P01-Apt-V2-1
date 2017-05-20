@@ -1,5 +1,10 @@
 <div class="row">
-
+<?php
+ echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          <h4><i class='icon fa fa-ban'></i> สร้างประเภทห้อง !!!</h4>
+                          คือ การสร้างประเภทห้อง เพื่อให้กำหนดค่าห้อง</div></div><br>"; 
+?> 
  <!--table all-->
     <div class="col-md-7">
         <!-- general form elements -->
@@ -12,7 +17,7 @@
           <div class="box-body">
               <div class="col-md-12">        
                 <div class="box-body table-responsive no-padding">
-                  <table id="myTableRoomType" class="table table-bordered table-striped">
+                  <table id="myTableRoomType" class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
                         <th>

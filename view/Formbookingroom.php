@@ -8,7 +8,7 @@
       <!-- /.box-header -->
       <div class="box-body table-responsive no-padding">
        <div class="col-md-12"> 
-        <table id="myTable2" class="table table-bordered table-striped">
+        <table id="myTable2" class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>
@@ -59,8 +59,8 @@
       </div>
       <!-- /.box-body -->
     </div>
-    <script type="text/javascript" language="javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <!--<script type="text/javascript" language="javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>-->
     <script type="text/javascript" language="javascript">
       $(document).ready(function () {
         var dataTable = $('#myTable2').DataTable({

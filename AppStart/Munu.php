@@ -8,7 +8,7 @@ require('appstart/buldle.php');
 ?>
 <header class="main-header">
         <!-- Logo -->
-        <a href="BackEnd.php" class="logo">
+        <a href="BackEnd" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>P</b>A</span>
           <!-- logo for regular state and mobile devices -->
@@ -55,10 +55,10 @@ require('appstart/buldle.php');
                   <!-- Menu Footer-->
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="EditProfile.php" class="btn btn-default btn-flat">Profile</a>
+                      <a href="Profile" class="btn btn-default btn-flat">Profile</a>
                     </div>
                     <div class="pull-right">
-                      <a href="index.php" class="btn btn-default btn-flat">ออกจากระบบ</a>
+                      <a href="Home" class="btn btn-default btn-flat">ออกจากระบบ</a>
                     </div>
                   </li>
                 </ul>
@@ -85,10 +85,11 @@ require('appstart/buldle.php');
                 <i class='fa fa-edit'></i> <span>บันทึกข้อมูล</span><i class='fa fa-angle-left pull-right'></i>
               </a>
               <ul class='treeview-menu'>               
-                <li><a href='CreateRoom.php'><i class='fa fa-circle-o'></i> บันทึกห้องพัก</a></li>
-                <li><a href='CreateSupply.php'><i class='fa fa-circle-o'></i> บันทึกค่ามิเตอร์</a></li>
-                <li><a href='CreateRoomType.php'><i class='fa fa-circle-o'></i> บันทึกประเภทห้อง</a></li>
-                <li><a href='CreateCustomerToRoom.php'><i class='fa fa-circle-o'></i> บันทึกการเข้าพักครั้งแรก</a></li> 
+                <li><a href='Room'><i class='fa fa-circle-o'></i> บันทึกห้องพัก</a></li>
+                <li><a href='Supply'><i class='fa fa-circle-o'></i> บันทึกค่ามิเตอร์</a></li>
+                <li><a href='RoomType'><i class='fa fa-circle-o'></i> บันทึกประเภทห้อง</a></li>
+                <li><a href='CustomerToRoom'><i class='fa fa-circle-o'></i> บันทึกการเข้าพักครั้งแรก</a></li> 
+                <li><a href='RoomStatus'><i class='fa fa-circle-o'></i> เปลี่ยนแปลงสถานะห้อง</a></li> 
               </ul>
             </li>";
             }
@@ -96,19 +97,22 @@ require('appstart/buldle.php');
             <li class="active treeview">
               <a href="#"><i class="fa fa-laptop"></i><span>บันทึกห้องพัก</span><i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">                
-                <li><a href="CreateBook.php"><i class="fa fa-circle-o"></i> บันทึกการจอง</a></li> 
-                <li><a href="CreateCustomer.php"><i class="fa fa-circle-o"></i> บันทึกการเข้าพัก</a></li> 
-                <li><a href="CreateRoomStatusOut.php"><i class="fa fa-circle-o"></i> บันทึกการแจ้งออก</a></li>                
-                <li><a href="CreateSupplyRoom.php"><i class="fa fa-circle-o"></i> บันทึกค่าใช้จ่ายของแต่ละห้อง</a></li>
+                <li><a href="Booking"><i class="fa fa-circle-o"></i> บันทึกการจอง</a></li> 
+                <li><a href="Customer"><i class="fa fa-circle-o"></i> บันทึกการเข้าพัก</a></li> 
+                <li><a href="RoomStatusOut"><i class="fa fa-circle-o"></i> บันทึกการแจ้งออก</a></li>                
+                <li><a href="SupplyRoom"><i class="fa fa-circle-o"></i> บันทึกค่าใช้จ่ายของแต่ละห้อง</a></li>
+                <li><a href="CreateBill_Otherexpen.php"><i class="fa fa-circle-o"></i> บันทึกใบแจ้งหนี้(แจ้งออก)</a></li>
               </ul>
             </li>           
             <li class="treeview">
               <a href="#"><i class="fa fa-pie-chart"></i> <span>รายงาน</span><i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="CreateBill_Booking.php"><i class="fa fa-circle-o"></i> พิมพ์ใบจองห้องพัก</a></li>
-                <li><a href="CreateBill.php"><i class="fa fa-circle-o"></i> พิมพ์ใบแจ้งหนี้</a></li>                
-                <li><a href="CreateBill_Receive.php"><i class="fa fa-circle-o"></i> พิมพ์ใบเสร็จ</a></li> 
-                <li><a href="CreateBill_Other.php"><i class="fa fa-circle-o"></i> พิมพ์ใบค่าอื่นๆ</a></li> 
+                <li><a href="BillBooking"><i class="fa fa-circle-o"></i> พิมพ์ใบจองห้องพัก</a></li>
+                <li><a href="Bill"><i class="fa fa-circle-o"></i> พิมพ์ใบแจ้งหนี้</a></li>                
+                <li><a href="BillReceive"><i class="fa fa-circle-o"></i> พิมพ์ใบเสร็จ</a></li> 
+                <li><a href="BillOther"><i class="fa fa-circle-o"></i> พิมพ์ใบค่าอื่นๆ</a></li> 
+                <!--<li><a href="CreateBill_Otherexpen.php"><i class="fa fa-circle-o"></i> พิมพ์ใบแจ้งหนี้(แจ้งออก)</a></li>-->
+                
               </ul>
             </li> 
             <?php 
@@ -116,7 +120,7 @@ require('appstart/buldle.php');
              echo "<li class='treeview'>
               <a href=''><i class='fa fa-edit'></i><span>จัดการระบบ</span><i class='fa fa-angle-left pull-right'></i></a>
                 <ul class='treeview-menu'>
-                  <li><a href='AddUser.php'><i class='fa fa-circle-o'></i> สร้างผู้ใช้งาน</a></li>                  
+                  <li><a href='AddUser'><i class='fa fa-circle-o'></i> สร้างผู้ใช้งาน</a></li>                  
                 </ul>
               </li>                
             </ul>";

@@ -133,15 +133,37 @@ class Room{
 			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
         	return $result;
 		}		
-		public function UpdateRoomStatus($id)         
+		public function UpdateRoomStatus($id,$ids)         
         {
-			$sql  = "UPDATE room set 	Status_Room ='4' WHERE Id = $id; ";			
+			
+			$sql  = "UPDATE room set 	Status_Room ='$ids' WHERE Id = $id; ";			
+			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        	return $result;
+			
+		}
+		public function UpdateContract($id,$User,$flag)         
+        {
+			if($flag=="Delete")
+			{
+			$sql  = "UPDATE contract set Delete_By ='$User' ,Delete_Date=NOW() WHERE Id = $id; ";			
+			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        	return $result;
+			}else 
+			{
+			$sql  = "UPDATE contract set Delete_By =null ,Delete_Date=null WHERE Id = $id; ";			
+			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        	return $result;	
+			}
+		}
+		public function GetBillStatus()         
+        {
+			$sql  = "SELECT * FROM roomstatus WHERE Id in(5,7,8,9) Order by Id; ";			
 			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
         	return $result;
 		}
-		public function UpdateContract($id,$User)         
+		public function UpdateBillStatus($id,$ids)         
         {
-			$sql  = "UPDATE contract set Delete_By ='$User' ,Delete_Date=NOW() WHERE Id = $id; ";			
+			$sql  = "UPDATE bill_room set Br_Status ='$ids' WHERE Id = $id; ";			
 			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
         	return $result;
 		}

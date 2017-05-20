@@ -11,12 +11,13 @@
                         4 => 'Status_Room'
                 );
                 $sql = "SELECT Room.Id Id,room.Room_No Room_No, RoomType_Id, Start_date, End_Date, Status_Room, RoomType, RoomDetail, Room_Rates, rt.flag ,
-                rs.RoomStatusDetail statusroom,CONCAT(cm.Title,' ',cm.Name, ' ',cm.Last_Name)As FullName,c.Id ConId
+                rs.RoomStatusDetail statusroom,CONCAT(cm.Title,' ',cm.Name, ' ',cm.Last_Name)As FullName,c.Id ConId,rb.Id brid
                 FROM room 
                 INNER JOIN contract c ON c.RoomId= room.Id
-                INNER JOIN customer cm ON cm.Id = c.Customer_id 
-                INNER JOIN roomstatus rs ON room.Status_Room = rs.Id
-                INNER JOIN roomtype rt ON room.RoomType_Id = rt.Id                
+                INNER JOIN customer cm ON cm.Id = c.Customer_id
+                INNER JOIN roomtype rt ON room.RoomType_Id = rt.Id 
+                INNER JOIN bill_room rb ON rb.Room_Id = room.Id 
+                INNER JOIN roomstatus rs ON rb.Br_Status = rs.Id               
                 Where ( room.Status_Room in(1,4)) 
                 and 
                 CASE WHEN c.Delete_Date is null THEN c.Delete_Date is null ELSE c.Id = (select c1.Id from contract c1 where c1.RoomId =  room.Id  ORDER BY ID DESC LIMIT 1) END";
@@ -34,6 +35,7 @@
                 while( $row=mysqli_fetch_array($query) ) {  // preparing an array
                                 $roomID =  $row["Id"];
                                 $ConId =  $row["ConId"];
+                                $brid =  $row["brid"];
                                 $RoomType_Id =$row["RoomType_Id"];
                                 $nestedData=array();                                              
                                 $nestedData[] = $row["Room_No"];
@@ -62,16 +64,16 @@
                                         }                                        
                                 else  
                                         {$nestedData[] = "<span class=\"label label-warning\">" . $row["statusroom"] . "</span>" ;}
-                                if($row["Status_Room"]==1 )
-                                {
+                                // if($row["Status_Room"]==1 )
+                                // {
                                         $Flag = "Save";                                       
-                                        $nestedData[] = "<center><a href = 'CreateRoomStatusOut.php?id=$roomID&ConId=$ConId&flag=$Flag '>แจ้งออก</a> </center>";
-                                }
-                                if($row["Status_Room"]==4 )
-                                {                                                                         
-                                                $Flag = "Edit";
-                                                $nestedData[] = "<center><a href = 'CreateRoomStatusOut.php?id=$roomID&ConId=$ConId&flag=$Flag'>แก้ไข</center>";                  
-                                }		
+                                        $nestedData[] = "<a href = 'EditRoomStatus.php?id=$roomID&brid=$brid&flag=$Flag '>เลือก</a>"; 
+                                //}
+                                // if($row["Status_Room"]==4 )
+                                // {                                                                         
+                                //                 $Flag = "Edit";
+                                //                 $nestedData[] = "<a href = 'CreateRoomStatusOut.php?id=$roomID&ConId=$ConId&flag=$Flag'>แจ้งห้องว่าง</a>"; 
+                                // }		
                                 $data[] = $nestedData;
                         }
                 $json_data = array(

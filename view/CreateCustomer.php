@@ -1,6 +1,10 @@
 <form role="form" name="CreateBook" action="" method="post" >
 <div class="row">
 <?php
+echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          <h4><i class='icon fa fa-ban'></i> บันทึกการเข้าพัก !!!</h4>
+                          คือการนำลูกค้าที่มีการ จอง ห้องพักไว้ เพื่อทำการยืนยันการเข้าพัก และทำสัญญา การเข้าพัก</div></div><br>";  
     require_once("controllers/CreateCustomerCls.php");   
     require_once("controllers/CreateBookCls.php"); 
     require_once("controllers/RoomCls.php");    
@@ -107,7 +111,7 @@
       <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">-->
       <div class="col-md-12">        
       <div class="box-body table-responsive no-padding">
-        <table id="myTableBook" class="table table-bordered table-striped">
+        <table id="myTableBook" class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>

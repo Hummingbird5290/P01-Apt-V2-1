@@ -25,6 +25,18 @@
     return false;
   }
 
+  function fnccheck3() {
+    var t1;
+    var t2;
+    var sum;
+    t1 = parseInt(document.form1.Eletric2_unit.value);
+    t2 = parseInt(document.form1.Eletric2_unitEnd.value);
+    if (t2 < t1) {
+      alert('เกิดข้อผิดพลาด กรุณาตรวจสอบข้อมูล!!!');
+      document.form1.Eletric2_unitEnd.focus();
+    }
+    return false;
+  }
 </script>
 <div class="row">
   <div class="col-md-12">
@@ -35,11 +47,11 @@
       <!-- /.box-header -->
       <div class="box-body table-responsive no-padding">
         <div class="col-md-12">
-          <table id="myTable2" class="table table-bordered table-striped">
+          <table id="myTable2" class="table table-bordered table-striped table-hover">
             <thead>
               <tr>
                 <th>
-                  <div align="center">ห้อง</div>
+                  <div align="center">เลขที่ห้อง</div>
                 </th>
                 <th>
                   <div align="center">ชื่อ-นามสกุล</div>
@@ -48,7 +60,7 @@
                   <div align="center">ประเภทห้อง</div>
                 </th>
                 <th>
-                  <div align="center">สถานะห้อง</div>
+                  <div align="center">สถานะห้องพัก</div>
                 </th>
                 <th>
                   <div align="center">จำนวนเงิน</div>
@@ -62,7 +74,7 @@
             <tfoot>
               <tr>
                 <th>
-                  <div align="center">ห้อง</div>
+                  <div align="center">เลขที่ห้อง</div>
                 </th>
                 <th>
                   <div align="center">ชื่อ-นามสกุล</div>
@@ -71,7 +83,7 @@
                   <div align="center">ประเภทห้อง</div>
                 </th>
                 <th>
-                  <div align="center">สถานะห้อง</div>
+                  <div align="center">สถานะห้องพัก</div>
                 </th>
                 <th>
                   <div align="center">จำนวนเงิน</div>
@@ -105,47 +117,59 @@
       $Billid=null;
       $flag=null;
       $Roomid=null;
-      if (isset($_GET['flag'])){
+      if (isset($_GET['flag'])) {
       if (isset($_GET['bid']))  {$Billid = $_GET['bid'];}
       if (isset($_GET['flag'])) {$flag = $_GET['flag'];}
       if (isset($_GET['id']))   {$Roomid = $_GET['id'];}
       
-      if ($flag != "Save"){
-        $Room_Id = $Configtype->GetId_roombillById($Billid);  //get id bill_room
-        $Roomid = $Room_Id->Room_Id;
+        if ($flag != "Save")
+        {
+          $Room_Id = $Configtype->GetId_roombillById($Billid);          //get id bill_room
+          $Roomid = $Room_Id->Room_Id;
         } 
-                               //get id bill_room}
         $getmynow = FALSE;
         $roomnum = $Configtype->Getroom_number($Roomid);
         $Rtype_id = $roomnum->RoomType_Id;  
-        $roomlese = $Configtype->Getpriceroom($Rtype_id);
-        $waterlese = $Configtype->GetWaterlese($Billid);
-        $electriclese = $Configtype->GetElectriclese($Billid);
-        $fornlese = $Configtype->GetFornlese($Billid);
-        $servlese = $Configtype->GetServlese($Billid);
-        $phonelese = $Configtype->GetPhone($Billid); 
-        $cmynow = $Configtype->GetMYNow($Roomid);
+        $roomlese = $Configtype->Getpriceroom($Rtype_id);                 //ราคาห้อง
+
+        $BillRoomId = $Configtype->GetIdBillRoom($Roomid);
+        //echo $BillRoomId ." BillRoomId ";
+        $fornlese = $Configtype->GetFornlese($Billid,$BillRoomId);            //ค่าเฟอร์นิเจอร์
+        $waterlese = $Configtype->GetWaterlese($Billid,$BillRoomId);          //ค่าน้ำ
+        $electriclese = $Configtype->GetElectriclese($Billid,$BillRoomId);    //ค่าไฟ
+        $servlese = $Configtype->GetServlese($Billid,$BillRoomId);            //ค่าบริการ
+        $phonelese = $Configtype->GetPhone($Billid,$BillRoomId);              //ค่าโทรศัพท์
+
+        $cmynow = $Configtype->GetMYNow($Roomid);                         //เช็คว่าถ้า bill_room มีค่าในเดือนปัจจุบัน จะคืนค่า obj bill_room มา
         $unitW = $Configtype->Showdata()->Water;
         $unitE = $Configtype->Showdata()->Electricity;
 
-        if(!empty($cmynow->Water_Unit_End)){
-          $getmynow = TRUE;
-        } 
+        if(!empty($cmynow->Water_Unit_End)){$getmynow = TRUE;} //true คือเดือนปัจจุบัน
         if (!empty($electriclese->Electricity_Unit) or !empty($waterlese->Water_Unit) ) {
           $checkrow =$Configtype->GetFirstExpen($Roomid); //Check month frist
-          if($checkrow > 1){
-            $waterunit= $waterunitEnd ;
+          //echo $checkrow;
+          if($checkrow == false){
+            $waterunit= $waterlese->Water_Unit_End;
             $waterunitEnd ="";
-            $eletricunit = $eletricunitEnd;
+            $eletricunit = $electriclese->Electricity_Unit_End;
             $eletricunitEnd = "";
+            $eletricunit2 = $electriclese->Electricity2_Unit_End;
+            $eletricunit2End = ""; 
+            //echo $Roomid;
+            $eletricunit = $electriclese->Electricity_Unit_End;
+            //echo $eletricunit ."| " ;               
           }else{
-            $waterunit = $waterlese->Water_Unit;
-            $waterunitEnd = $waterlese->Water_Unit_End;
-            $eletricunit = $electriclese->Electricity_Unit;
-            $eletricunitEnd = $electriclese->Electricity_Unit_End; 
+             $waterunit = $waterlese->Water_Unit;
+             $waterunitEnd = $waterlese->Water_Unit_End;
+             $eletricunit = $electriclese->Electricity_Unit;
+             $eletricunitEnd = $electriclese->Electricity_Unit_End;
+             $eletricunit2 = $electriclese->Electricity2_Unit;
+             $eletricunit2End = $electriclese->Electricity2_Unit_End;
+              //echo $Roomid;
+            $eletricunit = $electriclese->Electricity_Unit_End;
+            //echo $eletricunit ."|| " ; 
           }
         }
-
         $Room_num = $roomnum->Room_No;
         $Room_lese = $roomlese->Room_Rates; 
 
@@ -158,71 +182,77 @@
           }
         if(!empty($phonelese->Phone_Lease)){
           $phone_lese = $phonelese->Phone_Lease;
-          }
-       
-               if (isset($_REQUEST['submit'])) {
-                  $namelog = $_SESSION['Uid'];
-                  $BillNo = $Configtype->Getmaxbill();
-                  $Eletric_unit = $_REQUEST['Eletric_unit'];
-                  $Eletric_unitEnd = $_REQUEST['Eletric_unitEnd'];
-                  $Water_unit = $_REQUEST['Water_unit'];
-                  $Water_unitEnd = $_REQUEST['Water_unitEnd'];
-                  $fonniture_Lease = $_REQUEST['FornLease'];
-                  $sevice_Lease = $_REQUEST['ServLese'];
-                  $phone_Lease = $_REQUEST['PhoneLese'];
-                  $clicktype = "submit";
-                  $sumwater = ($Water_unitEnd - $Water_unit) * $unitW ;
-                  $sumeletric = ($Eletric_unitEnd - $Eletric_unit ) * $unitE;
-                  $total = $Room_lese + $fonniture_Lease + $sevice_Lease + $sumwater + $sumeletric + $phone_Lease ;
-                  $result = $Configtype->Save_expenroom($Roomid,$BillNo,$Room_lese,$Eletric_unit,$Eletric_unitEnd,$Water_unit,
-                 $Water_unitEnd,$fonniture_Lease,$sevice_Lease,$phone_Lease,$sumwater,$sumeletric,$total,$namelog,$clicktype);
-                  if ($result) {
-                     // Insert Success                   
-                  echo "<div class='col-md-2'></div><div class='col-md-8'>
-                  <div class='alert callout callout-success'>
-                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                    <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>
-                    การบันทึกค่าใช้จ่ายสำเร็จ
-                  </div></div><div class='col-md-2'></div><br>"; 
-                  }else{ // Insert Failed 
-                    echo "<div class='col-md-2'></div><div class='col-md-8'><div class='alert callout callout-danger'>
-                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                    <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-                     กรุณาตรวจสอบข้อมูล</div></div><div class='col-md-2'></div><br>";
-                    }
-               }
-if(isset($_REQUEST['edit'])){
-               $namelog = $_SESSION['Uid'];
-               $BillNo = $Configtype->Getmaxbill();
-               $Eletric_unit = $_REQUEST['Eletric_unit'];
-               $Eletric_unitEnd = $_REQUEST['Eletric_unitEnd'];
-               $Water_unit = $_REQUEST['Water_unit'];
-               $Water_unitEnd = $_REQUEST['Water_unitEnd'];
-               $fonniture_Lease = $_REQUEST['FornLease'];
-               $sevice_Lease = $_REQUEST['ServLese'];
-               $phone_Lease = $_REQUEST['PhoneLese'];
-               $clicktype = "edit";
-               $sumwater = ($Water_unitEnd - $Water_unit) * $unitW ;
-               $sumeletric = ($Eletric_unitEnd - $Eletric_unit ) * $unitE;
-               $total = $Room_lese + $fonniture_Lease + $sevice_Lease + $sumwater + $sumeletric + $phone_Lease ;
-               $result = $Configtype->Save_expenroom($Roomid,$BillNo,$Room_lese,$Eletric_unit,$Eletric_unitEnd,$Water_unit,
-                 $Water_unitEnd,$fonniture_Lease,$sevice_Lease,$phone_Lease,$sumwater,$sumeletric,$total,$namelog,$clicktype);
-                if ($result) {
-                   echo "<div class='col-md-2'></div><div class='col-md-8'>
-                  <div class='alert callout callout-success'>
-                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                    <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>
-                    การบันทึกแก้ไขค่าใช้จ่ายสำเร็จ
-                  </div></div><div class='col-md-2'></div><br>";   
-                }else{
-                   echo "<div class='col-md-2'></div><div class='col-md-8'><div class='alert callout callout-danger'>
-                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                    <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-                     กรุณาตรวจสอบข้อมูล</div></div><div class='col-md-2'></div><br>";
-                }
+          }  
+      //-------------------------------------------------------     
+        if (isset($_REQUEST['submit'])) {
+           $namelog = $_SESSION['Uid'];
+           $BillNo = $Configtype->Getmaxbill();
+           $Eletric_unit = $_REQUEST['Eletric_unit'];
+           $Eletric_unitEnd = $_REQUEST['Eletric_unitEnd'];
+           $Eletric2_unit = $_REQUEST['Eletric2_unit'];
+           $Eletric2_unitEnd = $_REQUEST['Eletric2_unitEnd'];
+           $Water_unit = $_REQUEST['Water_unit'];
+           $Water_unitEnd = $_REQUEST['Water_unitEnd'];
+           $fonniture_Lease = $_REQUEST['FornLease'];
+           $sevice_Lease = $_REQUEST['ServLese'];
+           $phone_Lease = $_REQUEST['PhoneLese'];
+           $clicktype = "submit";
+           $sumwater = ($Water_unitEnd - $Water_unit) * $unitW ;
+           $sumeletric = ($Eletric_unitEnd - $Eletric_unit ) * $unitE;
+           $sumeletric2 = ($Eletric2_unitEnd - $Eletric2_unit) * $unitE;
+           $total = $Room_lese + $fonniture_Lease + $sevice_Lease + $sumwater + $sumeletric + $sumeletric2 + $phone_Lease ;
+           $result = $Configtype->Save_expenroom($Roomid,$BillNo,$Room_lese,$Eletric_unit,$Eletric_unitEnd,$Eletric2_unit,$Eletric2_unitEnd
+           ,$Water_unit,$Water_unitEnd,$fonniture_Lease,$sevice_Lease,$phone_Lease,$sumwater,
+           $sumeletric,$sumeletric2,$total,$namelog,$clicktype);
+            if ($result) {
+              echo "<div class='col-md-2'></div><div class='col-md-8'>
+              <div class='alert callout callout-success'>
+              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+              <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>การบันทึกค่าใช้จ่ายสำเร็จ
+              </div></div><div class='col-md-2'></div><br>"; 
+              }else{ // Insert Failed 
+              echo "<div class='col-md-2'></div><div class='col-md-8'><div class='alert callout callout-danger'>
+              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+              <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
+              กรุณาตรวจสอบข้อมูล</div></div><div class='col-md-2'></div><br>";
+            }   
+        }
+        if(isset($_REQUEST['edit'])){
+          $namelog = $_SESSION['Uid'];
+          $BillNo = $Configtype->Getmaxbill();
+          $Eletric_unit = $_REQUEST['Eletric_unit'];
+          $Eletric_unitEnd = $_REQUEST['Eletric_unitEnd'];
+          $Eletric2_unit = $_REQUEST['Eletric2_unit'];
+          $Eletric2_unitEnd = $_REQUEST['Eletric2_unitEnd'];
+          $Water_unit = $_REQUEST['Water_unit'];
+          $Water_unitEnd = $_REQUEST['Water_unitEnd'];
+          $fonniture_Lease = $_REQUEST['FornLease'];
+          $sevice_Lease = $_REQUEST['ServLese'];
+          $phone_Lease = $_REQUEST['PhoneLese'];
+          $clicktype = "edit";
+          $sumwater = ($Water_unitEnd - $Water_unit) * $unitW ;
+          $sumeletric = ($Eletric_unitEnd - $Eletric_unit ) * $unitE;
+          $sumeletric2 = ($Eletric2_unitEnd - $Eletric2_unit) * $unitE;
+          $total = $Room_lese + $fonniture_Lease + $sevice_Lease + $sumwater + $sumeletric + $sumeletric2 + $phone_Lease ;
+          $result = $Configtype->Save_expenroom($Roomid,$BillNo,$Room_lese,$Eletric_unit,$Eletric_unitEnd,
+          $Eletric2_unit,$Eletric2_unitEnd,$Water_unit,$Water_unitEnd,
+          $fonniture_Lease,$sevice_Lease,$phone_Lease,$sumwater,$sumeletric,$sumeletric2,$total,$namelog,$clicktype);
+          if ($result) {
+            echo "<div class='col-md-2'></div><div class='col-md-8'>
+            <div class='alert callout callout-success'>
+            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+            <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>การบันทึกแก้ไขค่าใช้จ่ายสำเร็จ
+            </div></div><div class='col-md-2'></div><br>";  
+            
+            }else{
+              echo "<div class='col-md-2'></div><div class='col-md-8'><div class='alert callout callout-danger'>
+              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+              <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
+              กรุณาตรวจสอบข้อมูล</div></div><div class='col-md-2'></div><br>";
+             }
 
-               }
-}                   
+        }                
+    }                   
 ?>
       <form class="form-horizontal" method="post" name="form1">
         <div class="box-body">
@@ -253,7 +283,7 @@ if(isset($_REQUEST['edit'])){
                   echo  $forn_lese;
                  }
                else{
-                  if (isset($fornlese)) 
+                  if (isset($forn_lese)) 
                   {echo $forn_lese;}
                   else
                   { echo "0.00";}
@@ -277,12 +307,13 @@ if(isset($_REQUEST['edit'])){
               <div class="col-sm-10">
                 <div class="col-xs-4">
                   <!--<input type="number" class="form-control" name="Water_unit" value="" placeholder="ระบุตัวเลข" required>-->
-                  <input type="number" class="form-control" name="Water_unit" min="0" id="Water_unit" onKeyPress="if(this.value.length==4) return false;"
-                    value="<?php echo $waterunit ?>" placeholder="ระบุตัวเลข" required>
+                  <input type="number" class="form-control" name="Water_unit" min="0" id="Water_unit" onKeyPress="if(this.value.length==10) return false;"
+                    value="<?php 
+                    echo $waterunit ?>" placeholder="ระบุตัวเลข" required>
                 </div>
                 <label for="inputPassword3" class="col-sm-3 control-label">มิเตอร์น้ำสิ้นสุด</label>
                 <div class="col-xs-4">
-                  <input type="number" class="form-control" name="Water_unitEnd" min="0" onKeyPress="if(this.value.length==4) return false;"
+                  <input type="number" class="form-control" name="Water_unitEnd" min="0" onKeyPress="if(this.value.length==10) return false;"
                     Onchange="JavaScript:return fnccheck();" value="<?php echo $waterunitEnd ?>" placeholder="ระบุตัวเลข" required>
                 </div>
               </div>
@@ -292,23 +323,32 @@ if(isset($_REQUEST['edit'])){
               <label for="inputPassword3" class="col-sm-2 control-label">มิเตอร์ไฟเริ่มต้น</label>
               <div class="col-sm-10">
                 <div class="col-xs-4">
-                  <input type="number" class="form-control" name="Eletric_unit" min="0" onKeyPress="if(this.value.length==4) return false;"
+                  <input type="number" class="form-control" name="Eletric_unit" min="0" id="Eletric_unit" onKeyPress="if(this.value.length==10) return false;"
                     value="<?php 
-               if ($getmynow == true){
-                echo  $eletricunit;
-                 }else{
-                if (isset($eletricunitEnd)) {
-                echo  $eletricunitEnd ;}else{echo " ";}}?>" placeholder="ระบุตัวเลข" required>
+                    echo $eletricunit ?>" placeholder="ระบุตัวเลข" required>
                 </div>
                 <label for="inputPassword3" class="col-sm-3 control-label">มิเตอร์ไฟสิ้นสุด</label>
                 <div class="col-xs-4">
-                  <input type="number" class="form-control" name="Eletric_unitEnd" min="0" onKeyPress="if(this.value.length==4) return false;"
-                    Onchange="JavaScript:return fnccheck2();" value="<?php 
-               if ($getmynow == true){
-                echo  $eletricunitEnd;
-                 }else{
-                if (isset($eletricunit)) {
-                echo  $eletricunit ;}else{echo " ";}}?>" placeholder="ระบุตัวเลข" required>
+                  <input type="number" class="form-control" name="Eletric_unitEnd" min="0" onKeyPress="if(this.value.length==10) return false;"
+                    Onchange="JavaScript:return fnccheck2();" value="<?php echo $eletricunitEnd ?>" 
+                    placeholder="ระบุตัวเลข" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-2 control-label">มิเตอร์ไฟ2เริ่มต้น</label>
+              <div class="col-sm-10">
+                <div class="col-xs-4">
+                  <input type="number" class="form-control" name="Eletric2_unit" min="0" id="Eletric2_unit" onKeyPress="if(this.value.length==10) return false;"
+                    value="<?php if(isset($eletricunit2)){echo $eletricunit2;}else{echo "0000";} ?>" 
+                    placeholder="ระบุตัวเลข" required>
+                </div>
+                <label for="inputPassword3" class="col-sm-3 control-label">มิเตอร์ไฟ2สิ้นสุด</label>
+                <div class="col-xs-4">
+                  <input type="number" class="form-control" name="Eletric2_unitEnd" min="0" id="Eletric2_unitEnd" onKeyPress="if(this.value.length==10) return false;"
+                    Onchange="JavaScript:return fnccheck3();" value="<?php  if(isset($eletricunit2End)){echo $eletricunit2End;}else{echo "0000";} ?>" 
+                    placeholder="ระบุตัวเลข" required>
                 </div>
               </div>
             </div>

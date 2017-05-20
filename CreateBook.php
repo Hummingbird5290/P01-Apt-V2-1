@@ -3,7 +3,9 @@ require_once('View/Page.php');
 $page = new Page;
 $page->setTitle('Booking');
 $page->startBody();
+
 ?>
+
   <!--body-->       
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">

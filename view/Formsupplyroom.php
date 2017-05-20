@@ -7,7 +7,7 @@
                   </div><!-- /.box-header -->
                   <div class="box-body table-responsive no-padding">
                                    
-                    <table id="myTable2" class="table table-bordered table-striped">
+                    <table id="myTable2" class="table table-bordered table-striped table-hover">
                       <thead>
                         <tr>
                           <th><div align="center">ห้อง</div></th>

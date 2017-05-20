@@ -9,22 +9,28 @@
 			mysqli_set_charset($this->db, "utf8");
 		}
        
-       public function GetStatus_Room($id)
-            {       
-            //$password = md5($password);
-			//$sql2="SELECT uid from users WHERE uemail='$emailusername' or uname='$emailusername' and upass='$password'";
-			
-			//checking if the username is available in the table
-        	// $result = mysqli_query($this->db,$sql2);
-        	// $user_data = mysqli_fetch_array($result);
-        	// $count_row = $result->num_rows;
-
+       public function GetStatus_Room($id,$brs)
+            {      
+                if(empty($brs))
+                {
                     $sql = "SELECT *
-                    FROM room where Status_Room = $id
+                    FROM room 
+                    where room.Status_Room = $id
                     ";
-                    $query = mysqli_query($this->db, $sql) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 1");
-                   return $totalData = $query->num_rows;
+                    $query = mysqli_query($this->db, $sql) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 1");                    
+                    return $totalData = $query->num_rows;                   
+                }else 
+                {
+                    $sql = "SELECT *
+                    FROM room 
+                    LEFT JOIN bill_room br on room.Id = br.Room_Id where br.Br_Status = '$brs'
+                    AND DATE_FORMAT(CAST(br.Create_Date	 as DATE), '%m/%Y') = DATE_FORMAT( CAST(NOW() as DATE), '%m/%Y')";
+                    $query = mysqli_query($this->db, $sql) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 1");                    
+                    return $totalData = $query->num_rows;
+
+                }
             }
         
         }
+      
     ?>

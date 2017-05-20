@@ -15,7 +15,7 @@
                 FROM room 
                 INNER JOIN roomstatus rs ON room.Status_Room = rs.Id
                 INNER JOIN roomtype rt ON room.RoomType_Id = rt.Id
-                LEFT JOIN booking b ON b.Room_Id= room.Id 
+                LEFT JOIN booking b ON b.Room_Id= room.Book_Id 
                 Where ( room.Status_Room <> 1 ) 
                 and   (b.Status_Book = 0 and b.delete_by is null and b.Status_Book = 0 and b.Delete_By is null)
                 ";

@@ -1,7 +1,7 @@
 <?php
 require_once('View/Page.php');
 $page = new Page;
-$page->setTitle('CreateSupplyRoom');
+$page->setTitle('Create-Receive');
 $page->startBody();
 ?>
 <!--body-->       
@@ -11,35 +11,38 @@ $page->startBody();
           <section class="content-header">
             <h1>
               หน้าหลัก 
-              <small>บันทึกค่าใช้จ่ายของแต่ละห้อง</small>
+              <small>เปลี่ยนแปลงสถานะห้อง</small>
             </h1>
             <ol class="breadcrumb">
               <li><a href="#"><i class="fa fa-dashboard"></i> หน้าหลัก</a></li>
-              <li class="active">บันทึกค่าใช้จ่ายของแต่ละห้อง</li>
+              <li class="active">เปลี่ยนแปลงสถานะห้อง</li>
             </ol>
           </section>
           <!-- Main content -->
           <section class="content">
           <?php 
-          //  require('view/Formsupplyroom.php');
-          require('view/Formexpenroom.php');
-        //   require('view/room_status.php');
+           require('view/EditRoomStatus.php');        
           ?>          
           </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
-<!--Footer-->
 <?php
 $page->endBody();
 echo $page->render('view/template.php');
 require_once('AppStart/ScripPage.php');
-?>
-<script type="text/javascript" language="javascript">
+?> 
+ <script type="text/javascript" language="javascript">
       $(document).ready(function () {
-        var dataTable = $('#myTable2').DataTable({
-          "processing": true,
-          "serverSide": true,
+        var dataTable = $('#myTableRoomStatusOut').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
           "ajax": {
-            url: "controllers/GetgridExpenroomCls.php", // json datasource
+            url: "controllers/EditRoomStatusTable.php", // json datasource           
             type: "post",  // method  , by default get
             error: function () {  // error handling
               $(".employee-grid-error").html("");
@@ -49,4 +52,20 @@ require_once('AppStart/ScripPage.php');
           }
         });
       });
+
+      $(function () {        
+        //Date range picker
+        $('#datebook').datepicker({
+            format: "dd/mm/yyyy",
+            startDate: "now",            
+            todayBtn: true,
+            language: "th",
+            daysOfWeekHighlighted: "0,6",
+            autoclose: true,
+            orientation: "bottom auto",
+            todayHighlight: true
+        });
+        
+      });
     </script>
+   

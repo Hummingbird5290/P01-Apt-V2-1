@@ -11,13 +11,11 @@
                         3 => 'Book_Id,Sort'
                 );
                 $sql = "SELECT Room.Id Id,room.Room_No Room_No, RoomType_Id, Start_date, End_Date, Status_Room, RoomType, RoomDetail, Room_Rates, rt.flag ,
-                rs.RoomStatusDetail statusroom ,room.Book_Id,Sort,b.Id BId
+                rs.RoomStatusDetail statusroom ,room.Book_Id,Sort
                 FROM room                
                 INNER JOIN roomstatus rs ON room.Status_Room = rs.Id
                 INNER JOIN roomtype rt ON room.RoomType_Id = rt.Id
-                LEFT JOIN booking b ON b.Room_Id= room.Id 
-                LEFT JOIN contract c ON c.RoomId = room.Id
-                Where ( room.Status_Room <> 1 )  and c.Delete_Date is null
+                Where ( room.Status_Room <> 1 )  
                 -- and   (b.Status_Book = 0 and b.delete_by is null and b.Status_Book = 0 and Delete_By is null)
                 ";
                 $sqlquery = $sql;
@@ -26,7 +24,7 @@
                 $totalFiltered = $totalData;
                 
                 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-                $sql.=" where ( Room_No LIKE '".$requestData['search']['value']."%'  )";}
+                $sql.="AND ( Room_No LIKE '".$requestData['search']['value']."%'  )";}
                 $query=mysqli_query($db, $sql) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 2");
                 
                 $totalFiltered = mysqli_num_rows($query); // when there is a search parameter then we have to modify total number filtered rows as per search result. 
@@ -83,12 +81,9 @@
                                 {
                                         $Flag = "Save";
                                         if(!isset($Book_Id))
-                                                {$nestedData[] = "<a href = 'CreateCustomerToRoom.php?id=$roomID&idb=$Book_Id&flag=$Flag '>เลือก</a>";}
-                                        else 
-                                        {
-                                                $Flag = "Edit";
-                                                $nestedData[] = "<a href = 'CreateCustomerToRoom.php?id=$roomID&idb=$Book_Id&flag=$Flag'>ยืนยัน</a>"; 
-                                        }
+                                                {$nestedData[] = "<a href = 'CreateCustomerToRoom.php?id=$roomID&idb=$Book_Id&flag=$Flag '>เลือก</a>";
+                                        }else {$nestedData[]="<span class=\"label label-warning\">ต้องยืนยันการเข้าพัก</span>";}
+
                                 
                                 }else {$nestedData[] = "";}			
                                 $data[] = $nestedData;

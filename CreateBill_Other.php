@@ -1,7 +1,7 @@
 <?php
 require_once('View/Page.php');
 $page = new Page;
-$page->setTitle('Create - Fine');
+$page->setTitle('Createbillother');
 $page->startBody();
 ?>
 <!--body-->       
@@ -21,8 +21,8 @@ $page->startBody();
           <!-- Main content -->
           <section class="content">
           <?php 
-          //require('view/Formpayfine.php');
-          require('view/Formcreateotherbill.php')
+          require('view/Formcreateotherbill2.php');
+          //require('view/Formcreateotherbill.php')
           ?>          
           </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
@@ -31,43 +31,41 @@ $page->startBody();
 $page->endBody();
 echo $page->render('view/template.php');
 require_once('AppStart/ScripPage.php');
+if (isset($_SESSION['RoomId']))   {$Roomid = $_SESSION['RoomId']; }else{$Roomid=0;}
 ?>
- <script type="text/javascript" language="javascript">
+
+<script type="text/javascript" language="javascript">
       $(document).ready(function () {
-        var dataTable = $('#myTableBook').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "paging": true,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-          "ajax": {
-             url: "controllers/GetgridotherCls.php", // json datasource           
-             type: "post",  // method  , by default get
+        var dataTable = $('#myTable2').DataTable({
+          "processing": true,
+          "serverSide": true,
+          "ajax": {            
+            url: "controllers/GetgridotherCls.php",
+            type: "post",  // method  , by default get
             error: function () {  // error handling
               $(".employee-grid-error").html("");
               $("#employee-grid").append('<tbody class="employee-grid-error"><tr><th colspan="3">ไม่พบข้อมูล</th></tr></tbody>');
               $("#employee-grid_processing").css("display", "none");
             }
           }
-        });
+        }); 
+         var dataTable = $('#myTable3').DataTable({
+          "processing": true,
+          "serverSide": true,
+          "searching": false,
+          "ajax": {           
+            url: "controllers/GetgridotherbyroomCls.php<?php echo "?roomid=".$Roomid."" ?>",           
+            type: "post",  // method  , by default get
+            error: function () {  // error handling
+              $(".employee-grid-error").html("");
+              $("#employee-grid").append('<tbody class="employee-grid-error"><tr><th colspan="3">ไม่พบข้อมูล</th></tr></tbody>');
+              $("#employee-grid_processing").css("display", "none");
+            }
+          }
+        });       
+     
       });
-    
-      $(function () {        
-        //Date range picker
-        $('#datebook').datepicker({
-            format: "dd/mm/yyyy",
-            startDate: "now",            
-            todayBtn: true,
-            language: "th",
-            daysOfWeekHighlighted: "0,6",
-            autoclose: true,
-            orientation: "bottom auto",
-            todayHighlight: true
-        });
-        
-      });
-    </script>
+       
+</script>
+
    

@@ -1,6 +1,11 @@
 <form role="form" name="CreateRoom" action="" method="post" >
 <div class="row">
-
+<?php
+ echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          <h4><i class='icon fa fa-ban'></i> บันทึกการเข้าพักครั้งแรก !!!</h4>
+                          คือ การบันทึกการเข้าพักครั้งแรก โดยไม่ต้องทำการจองห้อง</div></div><br>"; 
+?> 
 <!--table-->
   <div class="col-md-7">
     <!-- general form elements -->
@@ -14,7 +19,7 @@
       <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">-->
       <div class="col-md-12">        
       <div class="box-body table-responsive no-padding">
-        <table id="myTableBook" class="table table-bordered table-striped">
+        <table id="myTableBook" class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>
@@ -90,10 +95,10 @@
                {
                   $Idb = $_GET['idb'];
                   $bookobj = $CreateBook->GetBooking($Idb);
-                  $Book_Amount =$bookobj->Book_Amount;
+                  $Amount_book =$bookobj->Book_Amount;
                   $Title=$bookobj->Title;
                   $Name=$bookobj->Name;
-                  $Last_Name=$bookobj->Last_Name;
+                  $Lastname=$bookobj->Last_Name;
                   $CardId=$bookobj->CardId;
                   $Email=$bookobj->Email;
                   $Tel=$bookobj->Tel;
@@ -107,7 +112,7 @@
               extract($_REQUEST);
               $CustomerToRoom = new CustomerToRoom();                 
               $user =$_SESSION['Username']; 
-              $result = $CustomerToRoom->CreateCustomarToRoom($Id,$Title, $Name, $Lastname, $CardId, $Email, $Tel, $Tel2, $Address,$user,$Amount_book,$DateCon,$Idb);             
+              $result = $CustomerToRoom->CreateCustomarToRoom($Id,$Title, $Name, $Lastname, $CardId, $Email, $Tel, $Tel2, $Address,$user,$Amount_book,$Bookdate,$Idb);             
             } elseif (isset($_REQUEST['Save'])) { 
               extract($_REQUEST);
               $CustomerToRoom = new CustomerToRoom();     

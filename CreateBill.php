@@ -11,11 +11,11 @@ $page->startBody();
           <section class="content-header">
             <h1>
               หน้าหลัก 
-              <small>สถานะห้องพัก</small>
+              <small>พิมพ์ใบแจ้งหนี้</small>
             </h1>
             <ol class="breadcrumb">
               <li><a href="#"><i class="fa fa-dashboard"></i> หน้าหลัก</a></li>
-              <li class="active">สถานะห้องพัก</li>
+              <li class="active">พิมพ์ใบแจ้งหนี้</li>
             </ol>
           </section>
           <!-- Main content -->

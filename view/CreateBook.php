@@ -1,6 +1,12 @@
 <form role="form" name="CreateBook" action="" method="post" >
 <div class="row">
-<?php   
+
+<?php 
+
+ echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          <h4><i class='icon fa fa-ban'></i> บันทึกการจอง !!!</h4>
+                          คือ การจองห้องที่ ว่าง หรือ แจ้งออก เพื่อดำเนินการนำลูกค้าเข้าห้อง อีกต่อไป</div></div><br>";  
     require("controllers/CreateBookCls.php"); 
     require("controllers/RoomCls.php");
             $RoomCls = new Room();
@@ -30,11 +36,12 @@
                   $Bookdate=$bookobj->Book_Date;
                } 
             } 
-            $result = null;         
+            $result = null; 
+            //echo $Idb. "||". $Id. "||".$flag;        
             if (isset($_REQUEST['Save'])) { 
               extract($_REQUEST); 
               $user =$_SESSION['Username'];              
-              $result = $CreateBook->CreateBook($Id,$Title, $Name, $Lastname, $CardId, $Email, $Tel, $Tel2, $Address,$user,$Amount_book,$DateBook);             
+              $result = $CreateBook->CreateBook($Id,$Title, $Name, $Lastname, $CardId, $Email, $Tel, $Tel2, $Address,$user,$Amount_book,$DateBook);            //echo $Idb. "||". $Id. "||".$flag;
               //23 kimimaro1 นามทดสอบ 7-7777-77-777-77-7 (777) 777-7777 88 kimimaro 50000               
             }            
            else if (isset($_REQUEST['Edit'])) { 
@@ -67,7 +74,7 @@
               //session_start();
               $user =$_SESSION['Username'];
               $result = $CreateBook->BookDel($Idb,$Id,$user);
-              //echo $result;
+              echo $result;
               if (isset($result)) {
                if ($result){
                  $flag = "Save";//clear textbox
@@ -101,7 +108,7 @@
         <div class="box-body">   
       <div class="col-md-12">        
       <div class="box-body table-responsive no-padding">
-        <table id="myTableBook" class="table table-bordered table-striped">
+        <table id="myTableBook" class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>
@@ -199,11 +206,11 @@
                   {
                     if ($flag=="Edit")
                         { 
-                          $result =$Book_Amount;$result=trim($result);
-                         echo "$result";
+                          $result = $Book_Amount;
+                         echo $result;
                         }     
                   }                        
-                 echo " placeholder=\"ค่ามัดจำ\"  required>
+                 echo "\" placeholder=\"ค่ามัดจำ\"  required>
                   </div>
                 </div>
               </div>

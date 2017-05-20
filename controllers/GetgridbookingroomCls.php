@@ -23,7 +23,8 @@ INNER JOIN roomtype rt ON room.RoomType_Id = rt.Id
 LEFT JOIN contract c ON c.RoomId= room.Id 
 LEFT JOIN customer cm ON cm.Id = c.Customer_id
 LEFT JOIN bill_room rb ON rb.Room_Id = room.Id 
-RIGHT JOIN booking bk ON  bk.Room_Id =  room.Id WHERE bk.Status_Book ='0' AND bk.Delete_Date IS NULL  ";
+RIGHT JOIN booking bk ON  bk.Room_Id =  room.Id WHERE bk.Status_Book ='0' AND bk.Delete_Date IS NULL  
+AND  (CASE WHEN c.Delete_Date is null THEN c.Delete_Date is null ELSE c.Id = (select c1.Id from contract c1 where c1.RoomId =  room.Id  ORDER BY ID DESC LIMIT 1) END)";
 $sqlquery = $sql;
 $query=mysqli_query($db, $sqlquery) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 1");
 $totalData = mysqli_num_rows($query);
@@ -32,7 +33,7 @@ $totalFiltered = $totalData;  // when there is no search parameter then total nu
 //$sql .= " LIMIT 0,10";
 
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-	$sql.=" where ( Room_No LIKE '".$requestData['search']['value']."%'  )";
+	$sql.="AND ( Room_No LIKE '".$requestData['search']['value']."%'  )";
 	}
 $query=mysqli_query($db, $sql) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 2");
 

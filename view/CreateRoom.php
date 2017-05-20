@@ -1,5 +1,10 @@
 <div class="row">
-
+<?php
+echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          <h4><i class='icon fa fa-ban'></i> บันทึกห้องพัก !!!</h4>
+                          คือ การสร้างห้องพัก แก้ไข ลบ </div></div><br>"; 
+?>
  <!--table all-->
     <div class="col-md-7">
         <!-- general form elements -->
@@ -13,7 +18,7 @@
               <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">-->
               <div class="col-md-12">        
                 <div class="box-body table-responsive no-padding">
-                  <table id="myTableRoom" class="table table-bordered table-striped">
+                  <table id="myTableRoom" class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
                         <th>

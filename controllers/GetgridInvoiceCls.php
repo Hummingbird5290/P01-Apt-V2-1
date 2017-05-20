@@ -9,7 +9,7 @@ $columns = array(
 	2 => 'RoomType_Id',
 	3 => 'Status_Room', 
 	4 => 'total',
-	5 => 'Room_No'
+	5 => 'Stbill'
 );
 if(!isset($_SESSION)) 
                   { 
@@ -22,17 +22,18 @@ rb.Total_Amount total,rst.RoomStatusDetail flag,rb.Br_Status as Stbill ,rb.Id as
 FROM room 
 INNER JOIN roomstatus rs ON room.Status_Room = rs.Id
 INNER JOIN roomtype rt ON room.RoomType_Id = rt.Id
-LEFT JOIN contract c ON c.RoomId= room.Id
-LEFT JOIN bill_room rb ON  rb.Room_Id = room.Id   
-LEFT JOIN customer cm ON cm.Id = c.Customer_id
-LEFT JOIN roomstatus rst ON  rst.RoomStatusId = rb.Br_Status 
-WHERE rb.Br_Status  IN (5,7) ";
+INNER JOIN contract c ON c.RoomId= room.Id
+INNER JOIN bill_room rb ON  rb.Room_Id = room.Id   
+INNER JOIN customer cm ON cm.Id = c.Customer_id
+INNER JOIN roomstatus rst ON  rst.RoomStatusId = rb.Br_Status 
+WHERE rb.Br_Status  IN (5,7) AND room.Status_Room NOT IN (2)
+AND CASE WHEN c.Delete_Date is NULL THEN c.Delete_Date IS NULL ELSE c.Id = (select c1.Id from contract c1 where c1.RoomId =  room.Id  ORDER BY ID DESC LIMIT 1) END ";
 $sqlquery = $sql;
 $query=mysqli_query($db, $sqlquery) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 1");
 $totalData = mysqli_num_rows($query);
 $totalFiltered = $totalData;  // when there is no search parameter then total number rows = total number filtered rows.
 if( !empty($requestData['search']['value']) ) {   // if there is a search parameter, $requestData['search']['value'] contains search parameter
-	$sql.=" where ( Room_No LIKE '".$requestData['search']['value']."%'  )";
+	$sql.=" AND ( Room_No LIKE '".$requestData['search']['value']."%'  )";
 	}
 $query=mysqli_query($db, $sql) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 2");
 
@@ -87,14 +88,17 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				$roomID =  $row["roomid"];
 				$billId = $row["billId"];					
 				if ($row["Stbill"] == 5){
+					if ($row["Status_Room"] == 4 ){
+						$nestedData[] = "<a href ='CreateBill.php?id=$roomID&mode=update7&bid=$billId' onclick=\"return  confirm('ยืนยันพิมพ์ใบแจ้งหนี้!!!')\">ยืนยันพิมพ์ใบแจ้งหนี้(แจ้งออก)</a>";
+					}
 					$nestedData[] = "<a href ='CreateBill.php?id=$roomID&mode=update7&bid=$billId' onclick=\"return  confirm('ยืนยันพิมพ์ใบแจ้งหนี้!!!')\">ยืนยันพิมพ์ใบแจ้งหนี้</a>";
-					// $nestedData[] = "<a href ='CreateBill.php?id=$roomID'>
-					// <button type=\"submit\" name=\"update\" value=\"update\" class=\"btn btn-block btn-default btn-sm \">ยืนยันพิมพ์ใบแจ้งหนี้</button></a>";
-					;
 				 }else{
-					 
-					 $nestedData[] ="<a href='Formprintinvoice.php?id=$roomID&bid=$billId&type=1' onclick=\"window.open(this.href,'window','width=840,height=880,resizable,scrollbars,toolbar,menubar') ;return false;\">พิมพ์ใบแจ้งหนี้<a>";
-					//  $nestedData[] = "<a href = 'Formdatainvoice.php?id=$roomID&mode=update7'>พิมพ์ใบแจ้งหนี้</a>";
+					 if($row["Status_Room"] == 4 ){
+						 $nestedData[] ="<a href='Formprintinvoice.php?id=$roomID&bid=$billId&type=5' onclick=\"window.open(this.href,'window','width=840,height=880,resizable,scrollbars,toolbar,menubar') ;return false;\">
+						 <font color='green'>พิมพ์ใบแจ้งหนี้(แจ้งออก)</font><a>";
+						 }
+						 $nestedData[] ="<a href='Formprintinvoice.php?id=$roomID&bid=$billId&type=1' onclick=\"window.open(this.href,'window','width=840,height=880,resizable,scrollbars,toolbar,menubar') ;return false;\">
+						 <font color='green'>พิมพ์ใบแจ้งหนี้</font><a>";	
 				 }
 								
 		$data[] = $nestedData;

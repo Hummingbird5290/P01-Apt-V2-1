@@ -1,7 +1,7 @@
 <?php
 require_once('View/Page.php');
 $page = new Page;
-$page->setTitle('CreateSupplyRoom');
+$page->setTitle('CreateBillOther_expen');
 $page->startBody();
 ?>
 <!--body-->       
@@ -11,19 +11,17 @@ $page->startBody();
           <section class="content-header">
             <h1>
               หน้าหลัก 
-              <small>บันทึกค่าใช้จ่ายของแต่ละห้อง</small>
+              <small>พิมพ์ใบแจ้งหนี้อื่นๆ</small>
             </h1>
             <ol class="breadcrumb">
-              <li><a href="#"><i class="fa fa-dashboard"></i> หน้าหลัก</a></li>
-              <li class="active">บันทึกค่าใช้จ่ายของแต่ละห้อง</li>
+              <li><a href="view/BackEnd.php"><i class="fa fa-dashboard"></i> หน้าหลัก</a></li>
+              <li class="active">พิมพ์ใบแจ้งหนี้อื่นๆ</li>
             </ol>
           </section>
           <!-- Main content -->
           <section class="content">
           <?php 
-          //  require('view/Formsupplyroom.php');
-          require('view/Formexpenroom.php');
-        //   require('view/room_status.php');
+          require('view/Formcreateotherexpenbill.php');
           ?>          
           </section><!-- /.content -->
         </div><!-- /.content-wrapper -->
@@ -32,14 +30,16 @@ $page->startBody();
 $page->endBody();
 echo $page->render('view/template.php');
 require_once('AppStart/ScripPage.php');
+if (isset($_SESSION['RoomId']))   {$Roomid = $_SESSION['RoomId']; }else{$Roomid=0;}
 ?>
+
 <script type="text/javascript" language="javascript">
       $(document).ready(function () {
         var dataTable = $('#myTable2').DataTable({
           "processing": true,
           "serverSide": true,
-          "ajax": {
-            url: "controllers/GetgridExpenroomCls.php", // json datasource
+          "ajax": {            
+            url: "controllers/GetgridotherexpenCls.php",
             type: "post",  // method  , by default get
             error: function () {  // error handling
               $(".employee-grid-error").html("");
@@ -47,6 +47,24 @@ require_once('AppStart/ScripPage.php');
               $("#employee-grid_processing").css("display", "none");
             }
           }
-        });
+        }); 
+         var dataTable = $('#myTable3').DataTable({
+          "processing": true,
+          "serverSide": true,
+          "searching": false,
+          "ajax": {           
+            url: "controllers/GetgridotherexpenbyroomCls.php<?php echo "?roomid=".$Roomid."" ?>",           
+            type: "post",  // method  , by default get
+            error: function () {  // error handling
+              $(".employee-grid-error").html("");
+              $("#employee-grid").append('<tbody class="employee-grid-error"><tr><th colspan="3">ไม่พบข้อมูล</th></tr></tbody>');
+              $("#employee-grid_processing").css("display", "none");
+            }
+          }
+        });       
+     
       });
-    </script>
+       
+</script>
+
+   

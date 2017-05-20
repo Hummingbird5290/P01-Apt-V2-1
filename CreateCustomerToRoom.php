@@ -32,13 +32,7 @@ require_once('AppStart/ScripPage.php');
       $(document).ready(function () {
         var dataTable = $('#myTableBook').DataTable({
             "processing": true,
-            "serverSide": true,
-            "paging": true,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
+            "serverSide": true,           
           "ajax": {
              url: "controllers/CreateCustomerToRoomTable.php", // json datasource           
              type: "post",  // method  , by default get

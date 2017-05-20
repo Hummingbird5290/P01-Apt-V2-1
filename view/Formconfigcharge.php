@@ -1,6 +1,11 @@
 <div class="col-md-3">
 </div>
  <?php 
+
+ echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          <h4><i class='icon fa fa-ban'></i> บันทึกค่ามิเตอร์ !!!</h4>
+                          คือ การกำหนดค่ามิเตอร์ ต่อ หน่วย ที่จะทำการคำนวณทั้งหมด</div></div><br>";  
                    require("controllers/Configcharge.php");  
                    $ConfigC = new config();
                    $Detaildata = $ConfigC->Showdata();
