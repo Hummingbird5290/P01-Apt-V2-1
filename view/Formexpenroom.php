@@ -43,7 +43,7 @@
     <div class="box">
       <div class="box-header">
         <h3 class="box-title">รายการบันทึกค่าใช้จ่ายของแต่ละห้อง</h3>
-      </div>
+       </div>
       <!-- /.box-header -->
       <div class="box-body table-responsive no-padding">
         <div class="col-md-12">
@@ -95,32 +95,28 @@
             </tfoot>
           </table>
         </div>
-      </div>
+       </div>
       <!-- /.box-body -->
     </div>
     <br>
     <?php 
-      if(!isset($_SESSION)) 
-                    { 
-                        session_start(); 
-                    } 
+      if(!isset($_SESSION)){session_start();} 
     ?>
-
     <div class="box box-info">
       <div class="box-header with-border">
         <h3 class="box-title">บันทึกค่าใช้จ่ายประจำห้อง</h3>
-      </div>
+       </div>
       <br>
       <?php             
-            require("controllers/SumconfigCls.php");
-      $Configtype = new sumconfigallHm();      
-      $Billid=null;
-      $flag=null;
-      $Roomid=null;
-      if (isset($_GET['flag'])) {
-      if (isset($_GET['bid']))  {$Billid = $_GET['bid'];}
-      if (isset($_GET['flag'])) {$flag = $_GET['flag'];}
-      if (isset($_GET['id']))   {$Roomid = $_GET['id'];}
+        require("controllers/SumconfigCls.php");
+        $Configtype = new sumconfigallHm();      
+        $Billid=null;
+        $flag=null;
+        $Roomid=null;
+        if (isset($_GET['flag'])) {
+        if (isset($_GET['bid']))  {$Billid = $_GET['bid'];}
+        if (isset($_GET['flag'])) {$flag = $_GET['flag'];}
+        if (isset($_GET['id']))   {$Roomid = $_GET['id'];}
       
         if ($flag != "Save")
         {
@@ -183,7 +179,7 @@
         if(!empty($phonelese->Phone_Lease)){
           $phone_lese = $phonelese->Phone_Lease;
           }  
-      //-------------------------------------------------------     
+        //-------------------------------------------------------     
         if (isset($_REQUEST['submit'])) {
            $namelog = $_SESSION['Uid'];
            $BillNo = $Configtype->Getmaxbill();
@@ -216,7 +212,7 @@
               <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
               กรุณาตรวจสอบข้อมูล</div></div><div class='col-md-2'></div><br>";
             }   
-        }
+         }
         if(isset($_REQUEST['edit'])){
           $namelog = $_SESSION['Uid'];
           $BillNo = $Configtype->Getmaxbill();
@@ -251,9 +247,9 @@
               กรุณาตรวจสอบข้อมูล</div></div><div class='col-md-2'></div><br>";
              }
 
-        }                
-    }                   
-?>
+          }                
+         }                   
+      ?>
       <form class="form-horizontal" method="post" name="form1">
         <div class="box-body">
           <div class="col-md-1"></div>
@@ -301,7 +297,6 @@
                 </div>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-2 control-label">มิเตอร์น้ำเริ่มต้น</label>
               <div class="col-sm-10">
@@ -318,7 +313,6 @@
                 </div>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-2 control-label">มิเตอร์ไฟเริ่มต้น</label>
               <div class="col-sm-10">
@@ -335,7 +329,6 @@
                 </div>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-2 control-label">มิเตอร์ไฟ2เริ่มต้น</label>
               <div class="col-sm-10">
@@ -352,7 +345,6 @@
                 </div>
               </div>
             </div>
-
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-2 control-label">ค่าโทรศัพท์</label>
               <div class="col-sm-10">

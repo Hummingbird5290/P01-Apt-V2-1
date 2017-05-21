@@ -75,6 +75,7 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				$billId = $row["billId"];					
 				$nestedData[] = $row["Room_No"];
 				$Status_Room = $row["Status_Room"];
+				$RoomType_Id = $row["RoomType_Id"];	
 				// $nestedData[] = $row["FullName"];
 				$print = " <a href='pages/examples/invoice-print.html' target='_blank class='btn btn-danger'><i class='fa fa-print'></i> Print</a>";
 				if($row["RoomType_Id"]==1)
@@ -111,19 +112,22 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 					$nestedData[] = "0.00";
 				}else{
 					$nestedData[] = $row["TotalAmount"];
-				}
-
-				// if($Status_Room==4){
-				// $nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&flag=Select&sr=$Status_Room'>เลือก</a>";
-				// }else{
+				}			
 				$roomID =  $row["Id"];
-				$billId = $row["billId"];					
+				$billId = $row["billId"];
+				if($Status_Room == 4)	{				
 				if ($row["TotalAmount"]==NULL){
 					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Save&sr=$Status_Room'>เลือก</a>";
 				 }else{
 					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'>แก้ไข</a>";
 				 }
-				// }
+				}else {					
+					if ($row["TotalAmount"]==NULL){
+					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Save&sr=$Status_Room'>เลือก</a>";
+				 }else{
+					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'>แก้ไข</a>";
+				 }
+				}		
 								
 		$data[] = $nestedData;
 	}
