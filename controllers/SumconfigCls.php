@@ -729,25 +729,29 @@ class sumconfigallHm {
         return $result;      
     }
     //Delete data of bill other when click delete data
-    public function DeleteOtherexpenbill($Roomid){
+    public function DeleteOtherexpenbill($Roomid,$tytap){
         $idroombill = $this->GetId_roombill($Roomid);
         $id = $idroombill->Id;
-
-        $sql = "DELETE FROM  bill_room  WHERE Id = '$id' ";
-        $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
-
-        $sql = "DELETE FROM  bill_water  WHERE Bill_Room_Id = '$id' ";
-        $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
-
-        $sql = "DELETE FROM  bill_electricity  WHERE Bill_Room_Id = '$id' ";
-        $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
-
-        $sql = "DELETE FROM  bill_roomclean  WHERE Bill_Room_Id = '$id' ";
-        $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
-
-        $sql = "DELETE FROM  bill_otherdamage  WHERE Bill_Room_Id = '$id' ";
-        $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
-
+        if ($tytap == 1){
+            $sql = "DELETE FROM  bill_water  WHERE Bill_Room_Id = '$id' ";
+            $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        }elseif ($tytap == 2){
+            $sql = "DELETE FROM  bill_electricity  WHERE Bill_Room_Id = '$id' ";
+            $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        }elseif($tytap == 3){
+            $sql = "DELETE FROM  bill_roomclean  WHERE Bill_Room_Id = '$id' ";
+            $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        }elseif($tytap == 4){
+            $sql = "DELETE FROM  bill_otherdamage  WHERE Bill_Room_Id = '$id' ";
+            $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        }
+            // $sql = "DELETE FROM  bill_room  WHERE Id = '$id' ";
+            // $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+        return $result; 
+    }
+    public function DeleteBillRoom($IdBiR){       
+            $sql = "DELETE FROM  bill_room  WHERE Id = '$IdBiR' ";
+            $result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
         return $result; 
     }
     //Convert sumtotal from number to wordthai    
