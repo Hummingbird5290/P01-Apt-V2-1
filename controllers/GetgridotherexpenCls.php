@@ -127,6 +127,15 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 				 }else{
 					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'><font color='green'>แก้ไข</font></a>";
 				 }
+<<<<<<< HEAD
+=======
+				}else {					
+					if ($row["TotalAmount"]==NULL){
+					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Save&sr=$Status_Room'>เลือก</a>";
+				 }else{
+					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'>แก้ไข</a>";
+				 }
+>>>>>>> origin/master
 				}		
 								
 		$data[] = $nestedData;
