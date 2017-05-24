@@ -58,33 +58,6 @@
         </div>
       </div>
       <!-- /.box-body -->
-    </div>
-    <!--<script type="text/javascript" language="javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>-->
-    <script type="text/javascript" language="javascript">
-      $(document).ready(function () {
-        var dataTable = $('#myTable2').DataTable({
-          "processing": true,
-          "serverSide": true,
-          "ajax": {
-            url: "controllers/GetgridbookingroomCls.php", // json datasource
-            type: "post",  // method  , by default get
-            error: function () {  // error handling
-              $(".employee-grid-error").html("");
-              $("#employee-grid").append('<tbody class="employee-grid-error"><tr><th colspan="3">ไม่พบข้อมูล</th></tr></tbody>');
-              $("#employee-grid_processing").css("display", "none");
-            }
-          }
-        });
-      });
-    </script>
-    <br>
-    <?php 
-      if(!isset($_SESSION)) 
-                    { 
-                        session_start(); 
-                    } 
-    ?>
-
+    </div>    
   </div>
 </div>

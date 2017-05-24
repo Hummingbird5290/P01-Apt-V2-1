@@ -101,7 +101,7 @@ require('appstart/buldle.php');
                 <li><a href="Customer"><i class="fa fa-circle-o"></i> บันทึกการเข้าพัก</a></li> 
                 <li><a href="RoomStatusOut"><i class="fa fa-circle-o"></i> บันทึกการแจ้งออก</a></li>                
                 <li><a href="SupplyRoom"><i class="fa fa-circle-o"></i> บันทึกค่าใช้จ่ายของแต่ละห้อง</a></li>
-                <li><a href="CreateBill_Otherexpen.php"><i class="fa fa-circle-o"></i> บันทึกใบแจ้งหนี้(แจ้งออก)</a></li>
+                <li><a href="CreateBill_Otherexpen.php"><i class="fa fa-circle-o"></i> บันทึกใบแจ้งหนี้&nbsp;<span class="label label-warning">new</span></a></li>
               </ul>
             </li>           
             <li class="treeview">
