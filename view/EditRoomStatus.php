@@ -2,9 +2,9 @@
 
 <?php
  echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
-                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                          <h4><i class='icon fa fa-ban'></i> การเปลี่ยนแปลงสถานะห้อง !!!</h4>
-                          คือการเปลี่ยนแปลงเพื่อให้สถานะบิล เพื่อให้สามารถพิมพ์ได้อีกครั้งหรือแก้ไขค่าต่างๆ ที่ต้องการหลังจากที่ยืนยันไปแล้ว หรือยกเลิกการออกบิล</div></div><br>";
+        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+        <h4><i class='icon fa fa-ban'></i> การเปลี่ยนแปลงสถานะห้อง !!!</h4>
+        คือการเปลี่ยนแปลงเพื่อให้สถานะบิล เพื่อให้สามารถพิมพ์ได้อีกครั้งหรือแก้ไขค่าต่างๆ ที่ต้องการหลังจากที่ยืนยันไปแล้ว หรือยกเลิกการออกบิล</div></div><br>";
 
     echo "<div class=\"col-md-8\">        
         <div class=\"box box-primary\">
@@ -23,11 +23,9 @@
                             <th>
                                 <div align=\"center\">ชื่อ-นามสกุล</div>
                             </th>
+                           
                             <th>
-                                <div align=\"center\">ประเภทห้อง</div>
-                            </th>
-                            <th>
-                                <div align=\"center\">สถานะห้องพัก</div>
+                                <div align=\"center\">ประเภทห้อง/สถานะห้องพัก</div>
                             </th>
                             <!--<th>
                                 <div align=\"center\">สถานะการจ่าย</div>
@@ -44,12 +42,9 @@
                             </th>
                             <th>
                                 <div align=\"center\">ชื่อ-นามสกุล</div>
-                            </th>
+                            </th>                           
                             <th>
-                                <div align=\"center\">ประเภทห้อง</div>
-                            </th>
-                            <th>
-                                <div align=\"center\">สถานะห้องพัก</div>
+                                <div align=\"center\">ประเภทห้อง/สถานะห้องพัก</div>
                             </th>
                             <!--<th>
                                 <div align=\"center\">สถานะการจ่าย</div>
@@ -126,15 +121,15 @@ if (isset($_GET['flag']))
                     //session_start();
                     //$ids=4;
                     $user =$_SESSION['Username']; 
-                    if($RoomStatus==0 or $RoomStatus == null)
-                    {
-                        echo "<br><div class='col-md-12'><div class='alert callout callout-danger'>
-                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                          <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-                          กรุณาเลือกสถานะห้อง</div></div><br>";
-                    }else 
-                    {
-                    $result = $Room->UpdateBillStatus($brid,$RoomStatus);                    
+                    // if($RoomStatus==0 or $RoomStatus == null)
+                    // {
+                    //     echo "<br><div class='col-md-12'><div class='alert callout callout-danger'>
+                    //       <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                    //       <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
+                    //       กรุณาเลือกสถานะห้อง</div></div><br>";
+                    // }else 
+                    // {
+                    $result = $Room->UpdateBillStatus($brid,$RoomStatus);                              
                       if ($result) 
                       {                   
                         echo "<br><div class='col-md-12'>
@@ -147,15 +142,15 @@ if (isset($_GET['flag']))
                           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                           <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
                           กรุณาตรวจสอบข้อมูล</div></div><br>";
-                      }
+                      }                  
                     }
-                  }                 
+                  //}                 
               echo "<div class=\"box-body\"> 
               <div class=\"col-md-12\">                              
                     <label for=\"เลขที่ห้อง\">เลือกสถานะ</label>
                       <div class=\"input-group\"><div class=\"input-group-addon\"><i class=\"fa fa-qrcode\"></i></div>                          
                           <select class=\"form-control\" name = \"RoomStatus\" required >";
-                              echo "<option value='0'>กรุณาเลือกห้อง</option>";
+                              echo "<option value='0'>กรุณาเลือกสถานะ</option>";
                               $Obj = $Room->GetBillStatus();
                               $count_row = $Obj->num_rows; 
                               if($count_row){                          

@@ -1,5 +1,10 @@
-<!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">-->
+
 <div class="row">
+<?php  echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+        <h4><i class='icon fa fa-ban'></i> พิมพ์ใบจองห้องพัก !!!</h4>
+        คือการออกบิลการจองห้องพัก </div></div><br>";
+?>
   <div class="col-md-12">
     <div class="box">
       <div class="box-header">

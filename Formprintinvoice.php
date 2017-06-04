@@ -127,15 +127,12 @@
                                              }  else
                                              {
                                             echo "<tr class=\"item-row\">
-                                                  <td class=\"item-name\"> 
-                                                  <div class=\"col-md-10\" style=\"text-align:left;font: 14px tomaho, Serif;\">
-                                                    $row[Bill_Detail]
-                                                    </div>
-                                                    <div class=\"col-md-1\" style=\"text-align:right;font: 14px tomaho, Serif;\">
-                                                    รวม
-                                                    </div>                                                   
+                                            <td class=\"item-name\"> 
+                                                  <div class=\"col-md-12\" style=\"text-align:left;font: 14px tomaho, Serif;margin-top:0.5em;\">
+                                                      $row[Bill_Detail] <p class=\"pull-right\" style=\"margin-top:0.1em;\">รวม</p>
+                                                      </div>                                                                     
                                                   </td> ";
-                                            echo "<th class=\"description\" style=\"text-align:right;font: 14px tomaho, Serif;\">
+                                            echo "<th class=\"description\" style=\"text-align:right;font: 14px tomaho, Serif;margin-top:0.1em;\">
                                               $row[Price]&nbsp; 
                                                     </th>
                                               </tr>";
@@ -143,7 +140,7 @@
                                              }                                         
                                   }
                                 } 
-                              else {echo "<option value='0'>ไม่มีข้อมูลห้องพัก</option>";}                           
+                              else {echo "<option value='0'>ไม่มีข้อมูลห้องพัก</option>";}                            
                   ?>
                    
                 </tbody>

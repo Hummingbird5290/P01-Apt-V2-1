@@ -1,4 +1,9 @@
 <div class="row">
+<?php  echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+        <h4><i class='icon fa fa-ban'></i> พิมพ์ใบอื่นๆ !!!</h4>
+        คือการออกบิลค่าเสียหายอื่นๆ ของแต่ละห้อง </div></div><br>";
+?>
   <?php 
     require("controllers/SumconfigCls.php");
     $Configtype = new sumconfigallHm();

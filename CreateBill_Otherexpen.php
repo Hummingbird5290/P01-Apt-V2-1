@@ -11,11 +11,11 @@ $page->startBody();
           <section class="content-header">
             <h1>
               หน้าหลัก 
-              <small>พิมพ์ใบแจ้งหนี้อื่นๆ</small>
+              <small>บันทึกค่าใช้จ่าย</small>
             </h1>
             <ol class="breadcrumb">
               <li><a href="view/BackEnd.php"><i class="fa fa-dashboard"></i> หน้าหลัก</a></li>
-              <li class="active">พิมพ์ใบแจ้งหนี้อื่นๆ</li>
+              <li class="active">บันทึกค่าใช้จ่าย</li>
             </ol>
           </section>
           <!-- Main content -->

@@ -163,8 +163,12 @@ class Room{
 		}
 		public function UpdateBillStatus($id,$ids)         
         {
-			$sql  = "UPDATE bill_room set Br_Status ='$ids' WHERE Id = $id; ";			
-			$result = mysqli_query($this->db,$sql) or die(mysqli_connect_errno()."Data cannot inserted");
+			try {
+			$sql  = "UPDATE bill_room set Br_Status ='$ids' WHERE Id = $id; ";	
+			$result = mysqli_query($this->db,$sql);
+			} catch (Exception $e) {
+				$result = False;
+			}
         	return $result;
 		}
 

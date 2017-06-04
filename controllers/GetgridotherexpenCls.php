@@ -39,6 +39,9 @@ WHERE  br.Room_Id = r.Id and DATE_FORMAT(CAST(br.Create_Date	 as DATE), '%m/%Y')
 (SELECT rst.RoomStatusDetail  FROM bill_room br 
 INNER JOIN roomstatus rst ON rst.RoomStatusId = br.Br_Status 
 WHERE  br.Room_Id = r.Id and DATE_FORMAT(CAST(br.Create_Date	 as DATE), '%m/%Y') = DATE_FORMAT( CAST(NOW() as DATE), '%m/%Y')  ORDER BY br.Id DESC LIMIT 1) flag,
+(SELECT br.Br_Status  FROM bill_room br 
+INNER JOIN roomstatus rst ON rst.RoomStatusId = br.Br_Status 
+WHERE  br.Room_Id = r.Id and DATE_FORMAT(CAST(br.Create_Date	 as DATE), '%m/%Y') = DATE_FORMAT( CAST(NOW() as DATE), '%m/%Y')  ORDER BY br.Id DESC LIMIT 1) flag2,
 (SELECT br.Id FROM bill_room br 
 INNER JOIN roomstatus rst ON rst.RoomStatusId = br.Br_Status 
 WHERE  br.Room_Id = r.Id and DATE_FORMAT(CAST(br.Create_Date	 as DATE), '%m/%Y') = DATE_FORMAT( CAST(NOW() as DATE), '%m/%Y')  ORDER BY br.Id DESC LIMIT 1) billId
@@ -47,8 +50,7 @@ INNER JOIN roomstatus rs ON r.Status_Room = rs.Id
 INNER JOIN roomtype rt ON r.RoomType_Id = rt.Id 
 inner JOIN contract c ON r.Id = c.RoomId
 inner JOIN customer cm ON c.Customer_id = cm.Id
-WHERE (CASE WHEN c.Delete_Date is null THEN c.Delete_Date is null ELSE c.Id = (select c1.Id from contract c1 where c1.RoomId =  r.Id  ORDER BY ID DESC LIMIT 1) END) 
-/*AND r.Status_Room NOT IN (4)*/
+WHERE (CASE WHEN c.Delete_Date is null THEN c.Delete_Date is null ELSE c.Id = (select c1.Id from contract c1 where c1.RoomId =  r.Id  ORDER BY ID DESC LIMIT 1) END)
 ";
 $sqlquery = $sql;
 $query=mysqli_query($db, $sqlquery) or die("ไม่สามารถติดต่อฐานข้อมูลได้ 1");
@@ -72,62 +74,64 @@ while( $row=mysqli_fetch_array($query) ) {  // preparing an array
 		$nestedData=array(); 
 				// $nestedData[] = "<a href=\"http://www.siamfocus.com/".  $row["sku"] . "/" .  $row["bb"] .".htm\" target=\"_blank\" title=\"". $row["content_title"] ."\">" . $row["content_title"] . "</a>";
 				$roomID =  $row["Id"];
-				$billId = $row["billId"];					
-				$nestedData[] = $row["Room_No"];
+				$billId = $row["billId"];
 				$Status_Room = $row["Status_Room"];
-				$RoomType_Id = $row["RoomType_Id"];	
+				$RoomType_Id = $row["RoomType_Id"];
+				$RoomType = $row["RoomType"];
+				$flag = $row["flag"];
 				// $nestedData[] = $row["FullName"];
 				$print = " <a href='pages/examples/invoice-print.html' target='_blank class='btn btn-danger'><i class='fa fa-print'></i> Print</a>";
-				if($row["RoomType_Id"]==1)
-					{$nestedData[] = "<span class=\"label label-success\">" . $row["RoomType"] . "</span>";}//<span class=\"label label-default\">" . $row["RoomDetail"] . "</span>";}
-					else 
-					{$nestedData[] = "<span class=\"label label-danger\">" . $row["RoomType"] . "</span>";}//<span class=\"label label-default\">" . $row["RoomDetail"] . "</span>";}
 				
-				if ($row["flag"]==NULL){
-					$name ="ยังไม่ได้บันทึก";
-					if($row["Status_Room"]==1)
-					{$nestedData[] = "<span class=\"label label-success\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $name . "</span>";}
-					elseif($row["Status_Room"]==2) 
-					{$nestedData[] = "<span class=\"label label-info\">" . $row["statusroom"] ."</span>&nbsp;<span class=\"label label-default\">" .$name . "</span>";}
-					elseif($row["Status_Room"]==3)  
-					{$nestedData[] = "<span class=\"label label-warning\">" . $row["statusroom"] ."</span>&nbsp;<span class=\"label label-default\">" . $name . "</span>";}	
-					elseif($row["Status_Room"]==4)  
-					{$nestedData[] = "<span class=\"label label-danger\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $name . "</span>";}
-					else  
-					{$nestedData[] = "<span class=\"label label-warning\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $name . "</span>";}	
-
+				// if($row["RoomType_Id"]==1)
+				// 	{
+				// 		$nestedData[] = "<span class=\"label label-success\">" . $row["RoomType"] . "</span>";}
+				// 	else 
+				// 	{
+				// 		$nestedData[] = "<span class=\"label label-danger\">" . $RoomType_Id  . "</span>";}
+				$nestedData[] = $row["Room_No"];
+				//********************************************************************************************************				
+				if ($flag==NULL){
+					$flag = "ยังไม่ได้บันทึก";
 				}else{
-					if($row["Status_Room"]==1)
-					{$nestedData[] = "<span class=\"label label-success\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $row["flag"] . "</span>";}
-					elseif($row["Status_Room"]==2) 
-					{$nestedData[] = "<span class=\"label label-info\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $row["flag"] . "</span>";}
-					elseif($row["Status_Room"]==3)  
-					{$nestedData[] = "<span class=\"label label-warning\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $row["flag"] . "</span>";}	
-					elseif($row["Status_Room"]==4)  
-					{$nestedData[] = "<span class=\"label label-danger\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $row["flag"] . "</span>";}
-					else  
-					{$nestedData[] = "<span class=\"label label-warning\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $row["flag"] . "</span>";}	
+					$flag = $row["flag"];
 				}	
+				if($row["Status_Room"]==1)
+				{$nestedData[] = "<span class=\"label label-danger\">" . $RoomType  . "</span>&nbsp;<span class=\"label label-success\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $flag . "</span>";}
+				elseif($row["Status_Room"]==2) 
+				{$nestedData[] = "<span class=\"label label-danger\">" . $RoomType  . "</span>&nbsp;<span class=\"label label-info\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $flag . "</span>";}
+				elseif($row["Status_Room"]==3)  
+				{$nestedData[] = "<span class=\"label label-danger\">" . $RoomType  . "</span>&nbsp;<span class=\"label label-warning\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $flag . "</span>";}	
+				elseif($row["Status_Room"]==4)  
+				{$nestedData[] = "<span class=\"label label-danger\">" . $RoomType  . "</span>&nbsp;<span class=\"label label-danger\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $flag . "</span>";}
+				else  
+				{$nestedData[] = "<span class=\"label label-danger\">" . $RoomType  . "</span>&nbsp;<span class=\"label label-warning\">" . $row["statusroom"] . "</span>&nbsp;<span class=\"label label-default\">" . $flag . "</span>";}	
+				//********************************************************************************************************
 				if ($row["TotalAmount"] == NUll ){
 					$nestedData[] = "0.00";
 				}else{
 					$nestedData[] = $row["TotalAmount"];
-				}			
+				}	
+				//********************************************************************************************************						
 				$roomID =  $row["Id"];
 				$billId = $row["billId"];
 				if($Status_Room == 4)	{				
 				if ($row["TotalAmount"]==NULL){
 					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Save&sr=$Status_Room'>เลือก</a>";
 				 }else{
-					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'><font color='green'>แก้ไข</font></a>";
+					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'><font color='red'>แก้ไข</font></a>";
 				 }
-				}else {					
-					if ($row["TotalAmount"]==NULL){
-					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Save&sr=$Status_Room'>เลือก</a>";
-				 }else{
-					$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'><font color='green'>แก้ไข</font></a>";
-				 }
+				}else {	
+					if ($row["flag2"]== 8 or $row["flag2"]== 9 ){
+						$nestedData[] = "<span class=\"label label-danger\">ยีนยันแล้ว</span>";
+					}else{
+						if ($row["TotalAmount"]==NULL){
+							$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Save&sr=$Status_Room'>เลือก</a>";
+							}else{
+								$nestedData[] = "<a href ='CreateBill_Otherexpen.php?id=$roomID&bid=$billId&flag=Edit&sr=$Status_Room'><font color='red'>แก้ไข</font></a>";
+								}
+						}			
 				}		
+				//********************************************************************************************************
 								
 		$data[] = $nestedData;
 	}

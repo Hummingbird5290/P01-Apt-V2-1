@@ -31,7 +31,7 @@
           $_SESSION['Roomid'] = $Roomid;     
           $detailroom = $Configtype->Getroom_number($Roomid);
           $getroombill = $Configtype->GetId_roombillById($billId);
-          $getotherbill = $Configtype->GetOtherbill($billId);
+          $getotherbill = $Configtype->GetOtherbill($Roomid);
           $typebill = $Configtype->GetBilltype($type);
           $detailbooking =  $Configtype->GetRoombooking($billId);
          // $firstDay=date('d/m/Y',strtotime("first day of this month")); 
@@ -48,6 +48,7 @@
              $book_total = number_format($detailbooking->Book_Amount, 2, '.', ',');
              $book_totalthai = $Configtype->num2wordsThai($book_total);
              }elseif($type == "3"){
+             $Book_No = str_pad($getroombill->Bill_No, 10, '0', STR_PAD_LEFT);//here 10 is padding length;
              $mode = $_GET['mode'];
              $updatemode9 = $Configtype->UpdateFlagStatus9($billId);
            }elseif($type == "4"){
@@ -122,10 +123,15 @@
               <table border="1" width="90%" height="auto">
                 <thead>
                   <tr>
-                     <th style="width:400px;height:30px;text-align:center;font: 16px tomaho, Serif;">รายการ</th>
-                    <!--style="width:400px;text-align:center;"-->
+                     <!--<th style="width:400px;height:30px;text-align:center;font: 16px tomaho, Serif;">รายการ</th>
+                    <th style="width:100px;height:30px;text-align:center;font: 16px tomaho, Serif;">จำนวนเงิน</th>-->
+                     <?php if($type != 1){ ?>
+                    <th style="width:400px;height:30px;text-align:center;font: 16px tomaho, Serif;">รายการ</th>
                     <th style="width:100px;height:30px;text-align:center;font: 16px tomaho, Serif;">จำนวนเงิน</th>
-                    <!--style="width:90px;text-align:center;"-->
+               <?php }else{ ?>
+                    <th style="width:400px;height:35px;text-align:center;font: 16px tomaho, Serif;">รายการ</th>
+                    <th style="width:100px;height:35px;text-align:center;font: 16px tomaho, Serif;">จำนวนเงิน</th>
+                 <?php }  ?>    
                   </tr>
                 </thead>
                  <tbody>
@@ -152,15 +158,12 @@
                                              }  else
                                              {
                                             echo "<tr class=\"item-row\">
-                                                  <td class=\"item-name\"> 
-                                                  <div class=\"col-md-10\" style=\"text-align:left;font: 14px tomaho, Serif;\">
-                                                    $row[Bill_Detail]
-                                                    </div>
-                                                    <div class=\"col-md-1\" style=\"text-align:right;font: 14px tomaho, Serif;\">
-                                                    รวม
-                                                    </div>                                                   
+                                            <td class=\"item-name\"> 
+                                                  <div class=\"col-md-12\" style=\"text-align:left;font: 14px tomaho, Serif;margin-top:0.5em;\">
+                                                      $row[Bill_Detail] <p class=\"pull-right\" style=\"margin-top:0.1em;\">รวม</p>
+                                                      </div>                                                                     
                                                   </td> ";
-                                            echo "<th class=\"description\" style=\"text-align:right;font: 14px tomaho, Serif;\">
+                                            echo "<th class=\"description\" style=\"text-align:right;font: 14px tomaho, Serif;margin-top:0.1em;\">
                                               $row[Price]&nbsp; 
                                                     </th>
                                               </tr>";
@@ -169,7 +172,7 @@
 
                                   }
                                 } 
-                              else {echo "<option value='0'>ไม่มีข้อมูลห้องพัก</option>";}                           
+                              else {echo "<option value='0'>ไม่มีข้อมูลห้องพัก</option>";}                         
                   ?>
                    
                 </tbody>

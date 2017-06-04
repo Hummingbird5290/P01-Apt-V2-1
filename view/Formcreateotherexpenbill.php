@@ -39,14 +39,17 @@
   }
 </script>
 <div class="row">
-  <div class="col-md-12">
+<?php  echo "<br><div class='col-md-12'><div class='alert callout callout-info'>
+        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+        <h4><i class='icon fa fa-ban'></i> บันทึกค่าใช้จ่าย !!!</h4>
+        คือการบันทึกค่าใช้จ่ายต่างๆ ของแต่ละห้อง เพื่อคำนวณค่าห้องของแต่ละเดือน และออกบิลต่อไป</div></div><br>";
+?>
   <?php 
     require("controllers/SumconfigCls.php");
     $Configtype = new sumconfigallHm();
     if(!isset($_SESSION)){ 
         session_start(); 
     }
-      $Ref =null;
       $Billid=null;
       $flag=null;
       $Roomid=null;
@@ -54,44 +57,48 @@
       $ReadOnly=True;
       $rowid = null;
       $_SESSION['RoomId']=null;
-    if(isset($_GET['flag'])) {
+    if (isset($_GET['flag'])) {
       if (isset($_GET['bid']))  {$Billid = $_GET['bid'];}
       if (isset($_GET['flag'])) {$flag = $_GET['flag'];}
       if (isset($_GET['sr']))   {$sr = $_GET['sr'];} 
-      if (isset($_GET['id']))   {$Roomid = $_GET['id'];      
-
+      if (isset($_GET['id']))   {$Roomid = $_GET['id']; 
       $_SESSION['RoomId'] = $Roomid;
       $Roomid = $_SESSION['RoomId'];}
       // if (isset($_GET['row']))  {$rowid= $_GET['row'];}
       if (isset($_GET['TyTab']))  {$tytap= $_GET['TyTab'];}
+
       $unitW = $Configtype->Showdata()->Water;
-      $unitE = $Configtype->Showdata()->Electricity;
+      $unitE = $Configtype->Showdata()->Electricity;   
 
       if ($flag == "Edit" or $flag == "Select"or $flag == "Save"){
           $roomnum = $Configtype->Getroom_number($Roomid);
           $Rtype_id = $roomnum->RoomType_Id;  
           $Room_num = $roomnum->Room_No;
           
-          $Room_lese = $Configtype->Getpriceroom($Rtype_id)==null?null:$Configtype->Getpriceroom($Rtype_id)->Room_Rates;                 //ราคาห้อง
+          $Room_lese = $Configtype->Getpriceroom($Rtype_id)->Room_Rates;                 //ราคาห้อง
           $BillRoomId = $Configtype->GetIdBillRoom($Roomid);
-          echo $BillRoomId ."|". $Roomid;
+          //echo $BillRoomId;
           $Billid = null;
           $waterlese = $Configtype->GetWaterlese($Billid,$BillRoomId);          //ค่าน้ำ
           $electriclese = $Configtype->GetElectriclese($Billid,$BillRoomId);    //ค่าไฟ
+          $forn_lese = $Configtype->GetFornlese($Billid,$BillRoomId);          //ค่าเฟอร์นิเจอร์
+          $serv_lese = $Configtype->GetServlese($Billid,$BillRoomId);           //ค่าบริการ
+          $phone_lese = $Configtype->GetPhone($Billid,$BillRoomId);             //ค่าโทรศัพท์
           $roomclean = $Configtype->GetRoomclean($BillRoomId);
           $otherdamage = $Configtype->GetOtherdamage($BillRoomId);
-          if ($sr == 1){
-          $forn_lese = $Configtype->GetFornlese($Billid,$BillRoomId)==null?null:$Configtype->GetFornlese($Billid,$BillRoomId);        //ค่าเฟอร์นิเจอร์
-          $serv_lese = $Configtype->GetServlese($Billid,$BillRoomId)==null?null:$Configtype->GetServlese($Billid,$BillRoomId)->Service_Lease;          //ค่าบริการ
-          $phone_lese = $Configtype->GetPhone($Billid,$BillRoomId)==null?null:$Configtype->GetPhone($Billid,$BillRoomId)->Phone_Lease;              //ค่าโทรศัพท์
-          }         
-          if(!empty($roomclean->Roomclean_Lease)){
-            $room_clean = $roomclean->Roomclean_Lease;     
-            }
-
-          if(!empty($otherdamage->Damage_Lease)){
-            $other_damage = $otherdamage->Damage_Lease;     
-            }
+          if($sr == 1 and $flag == "Select"){
+            if(!empty($forn_lese->Forniture_Lease)){$forn_lese = $forn_lese->Forniture_Lease;}
+            if(!empty($serv_lese->Service_Lease)){$serv_lese = $serv_lese->Service_Lease;}
+            if(!empty($phone_lese->Phone_Lease)){$phone_lese = $phone_lese->Phone_Lease;}
+          }elseif($sr == 1 and $flag == "Edit"){
+            $forn_lese = $Configtype->GetFornlese($Billid,$BillRoomId)->Forniture_Lease;            //ค่าเฟอร์นิเจอร์
+            $serv_lese = $Configtype->GetServlese($Billid,$BillRoomId)->Service_Lease;             //ค่าบริการ
+            $phone_lese = $Configtype->GetPhone($Billid,$BillRoomId)->Phone_Lease;              //ค่าโทรศัพท์
+          }elseif($sr == 4){
+            if(!empty($roomclean->Roomclean_Lease)){$room_clean = $roomclean->Roomclean_Lease;}
+            if(!empty($otherdamage->Damage_Lease)){$other_damage = $otherdamage->Damage_Lease;
+           }     
+          }
         if ($flag == "Select"or $flag == "Save"){
             $checkrow = $Configtype->CheckMonthNow($Roomid); //Check month now
             //echo $checkrow;
@@ -110,58 +117,52 @@
                 //echo $Roomid;
                 $eletricunit = $electriclese->Electricity_Unit_End;
                 //echo $eletricunit ."| " ; 
-                $forn_lese = $Configtype->GetFornlese($Billid,$BillRoomId)==null?null:$Configtype->GetFornlese($Billid,$BillRoomId);        //ค่าเฟอร์นิเจอร์
-                $serv_lese = $Configtype->GetServlese($Billid,$BillRoomId)==null?null:$Configtype->GetServlese($Billid,$BillRoomId)->Service_Lease;          //ค่าบริการ
-                $phone_lese = $Configtype->GetPhone($Billid,$BillRoomId)==null?null:$Configtype->GetPhone($Billid,$BillRoomId)->Phone_Lease;
+                $forn_lese = $Configtype->GetFornlese($Billid,$BillRoomId)->Forniture_Lease;            //ค่าเฟอร์นิเจอร์
+                $serv_lese = $Configtype->GetServlese($Billid,$BillRoomId)->Service_Lease;             //ค่าบริการ
+                $phone_lese = $Configtype->GetPhone($Billid,$BillRoomId)->Phone_Lease;              //ค่าโทรศัพท์
               }              
             }else{
-              $waterunit = $waterlese==null?null:$waterlese->Water_Unit;
-              $waterunitEnd = $waterlese==null?null:$waterlese->Water_Unit_End;
-              $electricity_unit = $electriclese==null?null:$electriclese->Electricity_Unit;
-              $electricity_unitEnd = $electriclese==null?null:$electriclese->Electricity_Unit_End;
-              $electricity2_unit = $electriclese==null?null:$electriclese->Electricity2_Unit;
-              $electricity2_unitEnd = $electriclese==null?null:$electriclese->Electricity2_Unit_End;
-              //echo $Roomid;
-              //$eletricunit = $electriclese->Electricity_Unit_End;
-              //echo $eletricunit ."|| " ; 
-            }
-          }
-          else{
-            if ($waterlese==null){
-              $waterunit=0;$waterunitEnd=0;}
-              else {
               $waterunit = $waterlese->Water_Unit;
-              $waterunitEnd = $waterlese->Water_Unit_End;}
-            if ($electriclese==null){
-              $electricity_unit=0;$electricity_unitEnd=0;
-              $electricity2_unit=0;$electricity2_unitEnd=0;}else {
+              $waterunitEnd = $waterlese->Water_Unit_End;
               $electricity_unit = $electriclese->Electricity_Unit;
               $electricity_unitEnd = $electriclese->Electricity_Unit_End;
               $electricity2_unit = $electriclese->Electricity2_Unit;
               $electricity2_unitEnd = $electriclese->Electricity2_Unit_End;
-              //$eletricunit = $electriclese->Electricity_Unit_End;
-              }  
+                //echo $Roomid;
+              $eletricunit = $electriclese->Electricity_Unit_End;
+              //echo $eletricunit ."|| " ; 
+            }
+          }
+          else{
+              $waterunit = $waterlese->Water_Unit;
+              $waterunitEnd = $waterlese->Water_Unit_End;
+              $electricity_unit = $electriclese->Electricity_Unit;
+              $electricity_unitEnd = $electriclese->Electricity_Unit_End;
+              $electricity2_unit = $electriclese->Electricity2_Unit;
+              $electricity2_unitEnd = $electriclese->Electricity2_Unit_End;
+              $eletricunit = $electriclese->Electricity_Unit_End;
           }
       }
+
       if ($flag == "Delete"){
         $clicktype = "delete";
-        //$result = $Configtype->DeleteOtherexpenbill($Roomid,$tytap);
-        //$result = $Configtype->DeleteBillRoom($bid);
-        //echo $result;
+        $result = $Configtype->DeleteOtherexpenbill($Roomid,$tytap);
+         //echo $result;
         if ($result) {
-            echo "<div class='alert callout callout-success'>
+            echo "<div class='col-md-12'></div>
+              <div class='alert callout callout-success'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> ลบข้อมูลสำเร็จ!</h4>ลบข้อมูลพิมพ์ใบอื่นๆสำเร็จ
-              </div>"; 
+              </div></div><br>"; 
               }else{ // Insert Failed 
-              echo "<div class='alert callout callout-danger'>
+              echo "<div class='col-md-12'></div><div class='alert callout callout-danger'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> ลบข้อมูลไม่สำเร็จ!!!</h4>
-              กรุณาตรวจสอบข้อมูล</div>";
+              กรุณาตรวจสอบข้อมูล</div></div><br>";
              }
       }            
     } 
-    if(isset($_REQUEST['submit'])) { 
+    if (isset($_REQUEST['submit'])) { 
            $namelog = $_SESSION['Uid'];
            $BillNo = $Configtype->Getmaxbill();
            $Eletric_unit = $_REQUEST['Eletric_unit'];
@@ -181,20 +182,19 @@
            $Eletric2_unit,$Eletric2_unitEnd,$Water_unit,$Water_unitEnd,$Roomcleanlese,$Damagelese,$sumwater,
            $sumeletric,$sumeletric2,$total,$namelog,$clicktype);
          if ($result) {
-            $sr=="4";
-              $Ref = "Edit";
-            echo "<div class='alert callout callout-success'>
+            echo "<div class='col-md-12'>
+              <div class='alert callout callout-success'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>บันทึกพิมพ์ใบแจ้งหนี้อื่นๆ
-              </div>"; 
+              <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ(แจ้งออก)!</h4>บันทึกพิมพ์ใบแจ้งหนี้อื่นๆ
+              </div></div><br>"; 
               }else{ // Insert Failed 
-              echo "<div class='alert callout callout-danger'>
+              echo "<div class='col-md-12'><div class='alert callout callout-danger'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-              กรุณาตรวจสอบข้อมูล</div>";
+              <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ(แจ้งออก)!!!</h4>
+              กรุณาตรวจสอบข้อมูล</div></div><br>";
              }
     } 
-    if(isset($_REQUEST['edit'])){
+    if (isset($_REQUEST['edit'])){
       $namelog = $_SESSION['Uid'];
       $BillNo = $Configtype->Getmaxbill();
       $Eletric_unit = $_REQUEST['Eletric_unit'];
@@ -215,19 +215,35 @@
       $sumeletric,$sumeletric2,$total,$namelog,$clicktype);
       //echo $result;
       if ($result) {
-            $Ref = null;
-            echo "<div class='alert callout callout-success'>
+            echo "<div class='col-md-12'>
+              <div class='alert callout callout-success'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>บันทึกแก้ไขพิมพ์ใบอื่นๆสำเร็จ
-              </div>"; 
+              </div></div><br>"; 
               }else{ // Insert Failed 
-              echo "<div class='alert callout callout-danger'>
+              echo "<div class='col-md-12'><div class='alert callout callout-danger'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-              กรุณาตรวจสอบข้อมูล</div>";
+              กรุณาตรวจสอบข้อมูล</div></div><br>";
              }
     }  
-
+    if (isset($_REQUEST['Delete'])){
+        $clicktype = "delete";
+        $result = $Configtype->DeleteOtherexpenbill($Roomid);
+        //echo $result;
+        if ($result) {
+            echo "<div class='col-md-12'>
+              <div class='alert callout callout-success'>
+              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+              <h4><i class='icon fa fa-ban'></i> ลบข้อมูลสำเร็จ!</h4>บันทึกพิมพ์ใบแจ้งหนี้อื่นๆ
+              </div></div><br>"; 
+              }else{ // Insert Failed 
+              echo "<div class='col-md-12'><div class='alert callout callout-danger'>
+              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+              <h4><i class='icon fa fa-ban'></i> ลบข้อมูลไม่สำเร็จ!!!</h4>
+              กรุณาตรวจสอบข้อมูล</div></div><br>";
+             }
+      }        
     if (isset($_REQUEST['Save_sr1'])) {
            $namelog = $_SESSION['Uid'];
            $BillNo = $Configtype->Getmaxbill();
@@ -251,17 +267,16 @@
            //echo $Roomid."|".$BillNo."|".$Room_lese."|".$Eletric_unit."|".$Eletric_unitEnd."|".$Eletric2_unit."|".$Eletric2_unitEnd."|".$Water_unit."|".$Water_unitEnd."|".$fonniture_Lease."|".$sevice_Lease."|".$phone_Lease."|".$sumwater."|".$sumeletric."|".$sumeletric2."|".$total."|".$namelog."|".$clicktype;
          
             if ($result) {
-              $sr=="1";
-              $flag = "Edit";
-              echo "<div class='alert callout callout-success'>
+              echo "<div class='col-md-12'>
+              <div class='alert callout callout-success'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>การบันทึกค่าใช้จ่ายสำเร็จ
-              </div>"; 
+              </div></div><br>"; 
               }else{ // Insert Failed 
-              echo "<div class='alert callout callout-danger'>
+              echo "<div class='col-md-12'><div class='alert callout callout-danger'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-              กรุณาตรวจสอบข้อมูล</div>";
+              กรุณาตรวจสอบข้อมูล</div></div><br>";
             }   
          }
     if(isset($_REQUEST['Edit_sr1'])){
@@ -286,37 +301,21 @@
           // $Eletric2_unit,$Eletric2_unitEnd,$Water_unit,$Water_unitEnd,
           // $fonniture_Lease,$sevice_Lease,$phone_Lease,$sumwater,$sumeletric,$sumeletric2,$total,$namelog,$clicktype;
             if ($result) {
-              echo "<div class='alert callout callout-success'>
+              echo "<div class='col-md-12'>
+              <div class='alert callout callout-success'>
               <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
               <h4><i class='icon fa fa-ban'></i> บันทึกสำเร็จ!</h4>การบันทึกแก้ไขค่าใช้จ่ายสำเร็จ
-              </div>";                
+              </div></div><br>";  
+              
               }else{
-                echo "<div class='alert callout callout-danger'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                echo "<div class='col-md-12'><div class='alert callout callout-danger'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 <h4><i class='icon fa fa-ban'></i> บันทึกไม่สำเร็จ!!!</h4>
-                กรุณาตรวจสอบข้อมูล</div>";
+                กรุณาตรวจสอบข้อมูล</div></div><br>";
               }
-          }  
-    if (isset($_REQUEST['Delete'])){      
-        $clicktype = "delete";
-        if (isset($_GET['bid']))  {$Billid = $_GET['bid'];}
-        $result = $Configtype->DeleteBillRoom($Billid);
-        //echo $result;
-        if ($result) {
-          $sr==null;
-          $flag = "Select";
-            echo "<div class='alert callout callout-success'>
-              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-ban'></i> ลบข้อมูลสำเร็จ!</h4>ลบข้อมูลพิมพ์ใบอื่นๆสำเร็จ
-              </div>"; 
-              }else{ // Insert Failed 
-              echo "</div><div class='alert callout callout-danger'>
-              <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-              <h4><i class='icon fa fa-ban'></i> ลบข้อมูลไม่สำเร็จ!!!</h4>
-              กรุณาตรวจสอบข้อมูล</div>";
-             }
-        }
-      ?>
-  </div>
+          }                
+                          
+                             
+  ?>
   <!--//table-->
     <div class="col-md-6">
             <div class="box box-warning">
@@ -324,8 +323,8 @@
                 <h3 class="box-title">เลือกห้องที่ต้องการทำรายการ</h3>
               </div>
               <div class="box-body">  
-              <div class="box-body table-responsive no-padding">
-              <div class="col-md-12">
+              <div class="box-body table-responsive">
+              <!--<div class="col-md-12">-->
                 <table id="myTable2" class="table table-bordered table-striped table-hover">
                   <thead>
                     <tr>
@@ -333,13 +332,13 @@
                         <div align="center">ห้อง</div>
                       </th>  
                       <th>
-                        <div align="center">ประเภทห้อง</div>
+                        <div align="center">ประเภทห้อง/สถานะห้องพัก</div>
                       </th>
+                      <!--<th>
+                        <div align="center" ></div>
+                      </th>-->
                       <th>
-                        <div align="center" >สถานะห้องพัก</div>
-                      </th>
-                      <th>
-                    <div align="center" >จำนวนเงิน</div>
+                    <div align="center" >เงิน</div>
                       </th>
                       <th>
                         <div align="center">เลือก</div>
@@ -353,13 +352,13 @@
                         <div align="center">ห้อง</div>
                       </th>  
                       <th>
-                        <div align="center">ประเภทห้อง</div>
+                        <div align="center">ประเภทห้อง/สถานะห้องพัก</div>
                       </th>
-                      <th>
+                      <!--<th>
                         <div align="center">สถานะห้องพัก</div>
-                      </th>
+                      </th>-->
                       <th>
-                        <div align="center">จำนวนเงิน</div>
+                        <div align="center">เงิน</div>
                       </th>
                       <th>
                         <div align="center">เลือก</div>
@@ -367,21 +366,19 @@
                     </tr>
                   </tfoot>
                 </table>
-              </div>
+              <!--</div>-->
             </div>              
             </div>
           </div>
     </div>
   <!--//table-->
-<?php
-
-  if ($sr==4 and $Ref == null){ 
-
+<?php 
+  if ($sr==4){ 
    echo "
     <div class=\"col-md-6\">
         <div class=\"box box-warning\">
           <div class=\"box-header with-border\">
-            <h3 class=\"box-title\">รายการพิมพ์ใบแจ้งหนี้</h3>
+            <h3 class=\"box-title\">รายการพิมพ์ใบแจ้งหนี้อื่นๆ</h3>
           </div>
           <form class=\"form-horizontal\" method=\"post\" name=\"form1\">
               <div class=\"box-body\">   
@@ -397,7 +394,7 @@
                     <div class=\"col-xs-3\">
                         <input type=\"number\" class=\"form-control\" name=\"Water_unit\" min=\"0\" id=\"Water_unit\" 
                         onKeyPress=\"if(this.value.length==10) return false;\"
-                        value=\""; echo $waterunit ; echo "\" placeholder=\"ระบุตัวเลข\" ";if ($ReadOnly==false){echo "readonly"; } echo " required>
+                        value=\""; echo $waterunit ; echo "\" placeholder=\"ระบุตัวเลข\" required>
                     </div>
                     <label for=\"inputPassword3\" class=\"col-sm-3 control-label\">มิเตอร์น้ำสิ้นสุด</label>
                     <div class=\"col-xs-3\">
@@ -411,7 +408,7 @@
                     <div class=\"col-xs-3\">
                         <input type=\"number\" class=\"form-control\" name=\"Eletric_unit\" min=\"0\" id=\"Eletric_unit\" 
                         onKeyPress=\"if(this.value.length==10) return false;\"
-                        value=\""; echo $electricity_unit; echo "\" placeholder=\"ระบุตัวเลข\" ";if ($ReadOnly==false){echo "readonly"; } echo " required>
+                        value=\""; echo $electricity_unit; echo "\" placeholder=\"ระบุตัวเลข\" required>
                     </div>
                     <label for=\"inputPassword3\" class=\"col-sm-3 control-label\">มิเตอร์ไฟสิ้นสุด</label>
                     <div class=\"col-xs-3\">
@@ -427,7 +424,7 @@
                         onKeyPress=\"if(this.value.length==10) return false;\"
                         value=\""; if(isset($electricity2_unit)){echo $electricity2_unit;}else{echo "0000";} echo
                          "\"
-                        placeholder=\"ระบุตัวเลข\" ";if ($ReadOnly==false){echo "readonly"; } echo " required>
+                        placeholder=\"ระบุตัวเลข\" required>
                     </div>
                     <label for=\"inputPassword3\" class=\"col-sm-3 control-label\">มิเตอร์ไฟ2สิ้นสุด</label>
                     <div class=\"col-xs-3\">
@@ -437,24 +434,24 @@
                     </div>
                  </div>
                 <div class=\"form-group\">
-                    <label for=\"inputPassword3\" class=\"col-sm-3 control-label\">ค่าปรับสภาพห้อง</label>
+                    <label for=\"inputPassword3\" class=\"col-sm-3 control-label\" style=\"font-size:13.5px;\">ค่าปรับสภาพห้อง</label>
                     <div class=\"col-sm-3\"> 
                       <input type=\"number\" name=\"Room_Clean\" id=\"Room_Clean\" class=\"form-control\" 
                       value=\""; if (isset($room_clean)) {echo $room_clean;}else{ echo "0.00";} echo "\" 
                       placeholder=\"ระบุตัวเลข\" required />
                     </div>
-                  <label for=\"inputPassword3\" class=\"col-sm-4 control-label\">ค่าเสียหายอื่นๆ</label>
+                  <label for=\"inputPassword3\" class=\"col-sm-3 control-label\">ค่าเสียหายอื่นๆ</label>
                     <div class=\"col-sm-3\"> 
                       <input type=\"number\" name=\"Other_Damage\" id=\"Other_Damage\"  class=\"form-control\"
                       value=\"";if (isset($other_damage)) {echo $other_damage;}else{ echo "0.00";} echo "\"
                       placeholder=\"ระบุตัวเลข\" required>
                     </div>
-                 </div>               
+                 </div>                      
                 <div class=\"form-group\">
-                  <center>";                      
+                 <center>";                      
                         if ($flag == "Edit"){
                         echo  "<button type=\"submit\" name=\"edit\" value=\"edit\" class=\"btn btn-info  \">แก้ไขข้อมูล</button>
-                        <button type=\"submit\" name=\"Delete\" value=\"Delete\" class=\"btn btn-danger  \" onclick=\"return confirm('ยืนยันลบรายการ!!!')\">ลบ</button>";
+                        <button type=\"Delete\" name=\"Delete\" value=\"Delete\" class=\"btn btn-danger  \" onclick=\"return confirm('ยืนยันลบรายการ!!!')\">ลบ</button>";
                         }else{
                           $checkrow = $Configtype->CheckMonthNow($Roomid); //Check month frist            
                             if($checkrow == false){
@@ -508,12 +505,13 @@
                       </tr>                        
                     </tfoot>
                  </table>                
+              
                </div>
            </form>
         </div>
     </div>";
   }
-  elseif($sr==1 and $Ref == null){
+  elseif($sr==1){
     echo "<div class=\"col-md-6\">
       <div class=\"box box-info\">
         <div class=\"box-header with-border\">
@@ -601,7 +599,7 @@
           <center>
             <div class=\"box-footer\">";           
               if ($flag == "Edit"){             
-              echo  "<button type=\"submit\" name=\"Edit_sr1\" value=\"edit\" class=\"btn btn-success btn-flat \">แก้ไข</button>";
+              echo  "<button type=\"submit\" name=\"Edit_sr1\" value=\"edit\" class=\"btn btn-success btn-flat \">แก้ไขข้อมูล</button>";
               }else{
                 echo  "<button type=\"submit\" name=\"Save_sr1\" value=\"save\" class=\"btn btn-success btn-flat \">บันทึก</button>";
               }   
@@ -609,6 +607,7 @@
           </center>       
         </form>
       </div>";  
-  }  
+  }
+  
 ?>
-</div>
+ </div>
